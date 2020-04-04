@@ -28,3 +28,8 @@ after_script:
 env:
   global:
     - GH_REP: github.com/WsWHL/wswhl.github.io.git
+notifications:
+  email:
+    - whlsoulmate@gmail.com
+  on_success: change
+  on_failure: always 
