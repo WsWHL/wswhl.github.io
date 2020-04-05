@@ -70,7 +70,7 @@
               </li>
             
               <li>
-                <a href="https://github.com/WsWHL" target="_blank" rel="noopener">
+                <a href="https://github.com/WsWHL/wswhl.github.io" target="_blank" rel="noopener">
                   
                   Github
                   
@@ -98,17 +98,17 @@
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <div class="post-info text-muted">
           
-            <!-- Author -->
-            <span class="author info">By WangHailin</span>
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
           
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2020/04/05</span>
-            <span class="time">15:30:16</span>
+            <span class="time">23:13:44</span>
           </span>
           
           <!--  Categories  -->
-            <span class="categories info">Under 
+          <span class="categories info">Under 
 
 <a href="/categories/C/">C#</a> / <a href="/categories/C/NET-Core/">.NET Core</a>
 </span>
@@ -116,13 +116,13 @@
         </div>
         <!-- Tags -->
         
-          <div class="post-tags text-muted">
-            Tags: 
+        <div class="post-tags text-muted">
+          Tags: 
 
 <a class="tag" href="/tags/CLI/">#CLI</a>
 
 
-          </div>
+        </div>
         
         <!-- Post Main Content -->
         <div class="post-content">
@@ -276,11 +276,24 @@
 </tbody></table>
 
         </div>
+        <div id="gitmentContainer"></div>
       </div>
     </div>
   </div>
 </article>
-
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  var gitment = new Gitment({
+    owner: 'WsWHL',
+    repo: 'wswhl.github.io',
+    oauth: {
+      client_id: 'b3b5f07c8fe4c7f597ff',
+      client_secret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    },
+  });
+  gitment.render('gitmentContainer');
+</script>
 
 
     <!-- Footer -->
