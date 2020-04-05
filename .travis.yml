@@ -19,6 +19,7 @@ after_script:
   - git checkout master
   - cd ../
   - mv .deploy_git/.git/ ./public/
+  - echo $GH_DOMAIN > ./public/CNAME
   - cd ./public
   - git config user.name "WangHailin"
   - git config user.email "whlsoulmate@gmail.com"
@@ -28,6 +29,7 @@ after_script:
 env:
   global:
     - GH_REP: github.com/WsWHL/wswhl.github.io.git
+    - GH_DOMAIN: thisblog.cn
 notifications:
   email:
     recipients:
