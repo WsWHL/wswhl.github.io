@@ -104,7 +104,7 @@
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2020/04/05</span>
-            <span class="time">23:20:23</span>
+            <span class="time">23:54:14</span>
           </span>
           
           <!--  Categories  -->
@@ -160,23 +160,24 @@
 <p>至此工具已经配置完成，请记得检查系统是否已打开相应端口。及检查服务商后台防火墙或安全组是否已允许开放相应端口号，没有就加一下，不然访问不通。<br>安装<a href="https://www.v2ray.com/awesome/tools.html" target="_blank" rel="noopener">客户端工具</a>，配置相应配置即可。</p>
 
         </div>
-        <div id="gitmentContainer"></div>
+        <div id="gitalk-container"></div>
       </div>
     </div>
   </div>
 </article>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
 <script>
-  var gitment = new Gitment({
-    owner: 'WsWHL',
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
     repo: 'wswhl.github.io',
-    oauth: {
-      client_id: 'b3b5f07c8fe4c7f597ff',
-      client_secret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
-    },
-  });
-  gitment.render('gitmentContainer');
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
 </script>
 
 
