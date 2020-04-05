@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="记录Python中装饰器的使用，以及不同写法的区别。">
+  <meta name="description" content="">
   <meta name="author" content="WangHailin">
   <!-- Open Graph Data -->
   <meta property="og:title" content="Python装饰器"/>
-  <meta property="og:description" content="记录Python中装饰器的使用，以及不同写法的区别。" />
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
   <meta property="og:site_name" content="This Blog"/>
   <meta property="og:type" content="article" />
   <meta property="og:image" content="https://thisblog.cn"/>
@@ -104,7 +104,7 @@
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2020/04/05</span>
-            <span class="time">10:29:06</span>
+            <span class="time">11:03:35</span>
           </span>
           
           <!--  Categories  -->
@@ -128,6 +128,7 @@
         <div class="post-content">
           <h1 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h1><p>装饰器，顾名思义就是用来包装的，在表面进行修饰的方式。</p>
 <p>装饰器本身就是一种函数或类，返回值同样也是函数或类。它的意义主要在于无需对原有代码进行修改的前提下添加一些额外的功能，采用一种切面编程思想，比如常用的应用场景日志记录、性能测试、事物处理、权限校验、缓存等功能。有了装饰器我们能够尽可能的重用代码，避免大量重复代码，有效的规避规避对现有业务代码进行改动导致新的产生。</p>
+<a id="more"></a>
 <h1 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h1><p>本文主要演示手动实现和采用Python语法糖实现方式。</p>
 <h2 id="手动实现"><a href="#手动实现" class="headerlink" title="手动实现"></a>手动实现</h2><p>1.简单函数调用</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(func)</span>:</span></span><br><span class="line">  print(<span class="string">'begin execution func.'</span>)</span><br><span class="line">  func()</span><br><span class="line">  print(<span class="string">'func execution ends.'</span>)</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line">  print(<span class="string">'hello.'</span>)</span><br><span class="line">  </span><br><span class="line">test(hello)</span><br></pre></td></tr></table></figure>
