@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="WangHailin">
   <!-- Open Graph Data -->
-  <meta property="og:title" content="This Blog README"/>
+  <meta property="og:title" content="解决Mac默认vim无法使用剪贴板问题"/>
   <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
   <meta property="og:site_name" content="This Blog"/>
   <meta property="og:type" content="article" />
@@ -47,7 +47,7 @@
     <div class="row">
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <div class="page-title with-background-image">
-          <p class="title">This Blog README</p>
+          <p class="title">解决Mac默认vim无法使用剪贴板问题</p>
           <p class="subtitle"></p>
         </div>
         <div class="site-menu with-background-image">
@@ -110,7 +110,7 @@
           <!--  Categories  -->
             <span class="categories info">Under 
 
-<a href="/categories/Deploy/">Deploy</a>
+<a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>
 </span>
           
         </div>
@@ -119,46 +119,33 @@
           <div class="post-tags text-muted">
             Tags: 
 
-<a class="tag" href="/tags/Blog/">#Blog</a> <a class="tag" href="/tags/README/">#README</a>
+<a class="tag" href="/tags/Mac-OS/">#Mac OS</a> <a class="tag" href="/tags/Vim/">#Vim</a>
 
 
           </div>
         
         <!-- Post Main Content -->
         <div class="post-content">
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>​        本项目是使用Python语言开发的Blog网站。后端使用的是Django框架，前段使用的是Foundation JavaScript库。</p>
-<blockquote>
-<p>在线网站<a href="https://www.thisblog.cn" target="_blank" rel="noopener">https://www.thisblog.cn</a>,期待你的加入！</p>
-</blockquote>
+          <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>mac系统自带的vim属于阉割版，不支持一些功能，因此需要手动编译替换。<br>查看默认vim版本及已启用功能：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim --version</span><br></pre></td></tr></table></figure>
+<p><strong>* 输出功能前面带符号<code>+</code>表示已启用该功能。例如：输出包含<code>+clipboard</code>表示支持剪贴板复制功能，否则不支持。*</strong></p>
 <a id="more"></a>
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li>开发工具：vs code</li>
-<li>数据库：my sql</li>
-<li>缓存：redis</li>
-<li>代理：nginx<blockquote>
-<p>Python &gt;= 3.7.2<br>Django &gt;= 2.1.6<br>Foundation &gt;= 6.5</p>
+<h2 id="源码编译"><a href="#源码编译" class="headerlink" title="源码编译"></a>源码编译</h2><ol>
+<li><p>下载源码<br>源码地址：<a href="https://github.com/vim/vim/releases" target="_blank" rel="noopener">https://github.com/vim/vim/releases</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -LJO https://github.com/vim/vim/archive/v8.2.0352.tar.gz	#下载</span><br><span class="line">tar -zxvf vim-8.2.0352.tar.gz	#解压</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置编译参数<br>需要支持的功能就在此处设置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --with-features=huge --enable-pythoninterp=yes  --enable-cscope --enable-fontset --enable-perlinterp --enable-rubyinterp --with-python-config-dir=/usr/lib/python2.7/config --prefix=/usr/local</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>默认已启用剪贴板复制功能，所以不用设置</p>
 </blockquote>
 </li>
-</ul>
-<h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> SECRET_KEY=******</span><br><span class="line">python manage.py runserver 8000</span><br></pre></td></tr></table></figure>
-<ul>
-<li>开发工具vs code运行时会自动读取根目录下的<code>.env</code>环境变量文件，该文件中配置了必要的一些配置信息，不配置会使用默认值。出于安全考虑，<code>SECRET_KEY</code>只使用环境变量配置，该配置生成方式可参阅Django官方文档。</li>
-</ul>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><ul>
-<li>系统：centos</li>
-<li>服务：wsgi</li>
-<li>代理：nginx</li>
-<li>容器：docker</li>
-</ul>
-<h3 id="编译镜像"><a href="#编译镜像" class="headerlink" title="编译镜像"></a>编译镜像</h3><p>构建工具<a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">docker-compose</a></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose build</span><br></pre></td></tr></table></figure>
-<h3 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br><span class="line">docker-compose top <span class="comment"># 查看运行中的容器状态</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>-d 将进程放入后台执行</p>
-</blockquote>
-<ul>
-<li>默认配置了ssl证书，相关配置参见根目录下的nginx文件夹中的nginx.conf配置文件。</li>
-</ul>
+<li><p>编译和安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>替换默认vim</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo "alias vim='/usr/local/bin/vim'" &gt;&gt; ~/.zshrc #默认文件为.bash_profile</span><br><span class="line">source ~/.zshrc</span><br></pre></td></tr></table></figure></li>
+</ol>
 
         </div>
       </div>
