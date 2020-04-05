@@ -3,7 +3,7 @@ menu:
   Home: /
   Archives: /archives
   # change github and email values to your own addresses
-  Github: https://github.com/WsWHL
+  Github: https://github.com/WsWHL/wswhl.github.io
   Email: mailto:whlsoulmate@gmail.com
 rss: /atom.xml
 

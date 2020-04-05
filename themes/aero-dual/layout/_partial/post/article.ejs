@@ -8,8 +8,8 @@
       <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
         <div class="post-info text-muted">
           <% if (config.author) { %>
-            <!-- Author -->
-            <span class="author info">By <%- config.author %></span>
+          <!-- Author -->
+          <span class="author info">By <%- config.author %></span>
           <% } %>
           <!-- Date -->
           <span class="date-time info">On
@@ -18,20 +18,34 @@
           </span>
           <% if (post.categories && post.categories.length){ %>
           <!--  Categories  -->
-            <span class="categories info">Under <%- partial('categories', {categories: post.categories}) %></span>
+          <span class="categories info">Under <%- partial('categories', {categories: post.categories}) %></span>
           <% } %>
         </div>
         <!-- Tags -->
         <% if (post.tags && post.tags.length) { %>
-          <div class="post-tags text-muted">
-            Tags: <%- partial('tags', {tags: post.tags, tagHash: true}) %>
-          </div>
+        <div class="post-tags text-muted">
+          Tags: <%- partial('tags', {tags: post.tags, tagHash: true}) %>
+        </div>
         <% } %>
         <!-- Post Main Content -->
         <div class="post-content">
           <%- post.content %>
         </div>
+        <div id="gitmentContainer"></div>
       </div>
     </div>
   </div>
 </article>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  var gitment = new Gitment({
+    owner: 'WsWHL',
+    repo: 'wswhl.github.io',
+    oauth: {
+      client_id: 'b3b5f07c8fe4c7f597ff',
+      client_secret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    },
+  });
+  gitment.render('gitmentContainer');
+</script>
