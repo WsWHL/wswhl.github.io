@@ -9,7 +9,7 @@ tags:
 ---
 ## 介绍
 ​		本项目是使用Python语言开发的Blog网站。后端使用的是Django框架，前段使用的是Foundation JavaScript库。
-> 在线网站[https://www.thisblog.cn](https://www.thisblog.cn),期待你的加入！
+> 在线网站[https://thisblog.cn](https://thisblog.cn),期待你的加入！
 <!--more -->
 ## 环境
 * 开发工具：vs code
