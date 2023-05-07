@@ -22,11 +22,12 @@ hexo框架是一个主题丰富, 内容简洁的轻量级静态博客框架. 但
 - 👋Linux命令基础, 会动的小指头
 - 🤔️一颗善于思考的小脑瓜...
 
-项目依赖项`git`、`pnpm`、`node.js`、`hexo`
+项目依赖项`git`、`pnpm`、`node`、`hexo`
 
 1. 安装`pnpm`包管理工具
    ```shell
    bash wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+   pnpm env use --global lts     # 安装node环境
    ```
    这里仅以linux 64位平台举例,具体平台参考官网: https://pnpm.io/installation
 
