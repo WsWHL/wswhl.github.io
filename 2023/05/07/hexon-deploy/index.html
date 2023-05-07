@@ -30,7 +30,7 @@
   <!-- Custom CSS -->
   
   
-<link rel="stylesheet" href="/css/style.light.css">
+<link rel="stylesheet" href="/css/style.dark.css">
 
 
   <!-- Google Analytics -->
@@ -104,7 +104,7 @@
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2023/05/07</span>
-            <span class="time">12:55:25</span>
+            <span class="time">15:46:19</span>
           </span>
           
           <!--  Categories  -->
@@ -141,10 +141,10 @@
 <li>👋Linux命令基础, 会动的小指头</li>
 <li>🤔️一颗善于思考的小脑瓜…</li>
 </ul>
-<p>项目依赖项<code>git</code>、<code>pnpm</code>、<code>node.js</code>、<code>hexo</code></p>
+<p>项目依赖项<code>git</code>、<code>pnpm</code>、<code>node</code>、<code>hexo</code></p>
 <ol>
 <li><p>安装<code>pnpm</code>包管理工具</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash wget -qO- https://get.pnpm.io/install.sh | ENV=&quot;$HOME/.bashrc&quot; SHELL=&quot;$(which bash)&quot; bash -</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bash wget -qO- https://get.pnpm.io/install.sh | ENV=&quot;$HOME/.bashrc&quot; SHELL=&quot;$(which bash)&quot; bash -</span><br><span class="line">pnpm env use --global lts     # 安装node环境</span><br></pre></td></tr></table></figure>
 <p>这里仅以linux 64位平台举例,具体平台参考官网: <a target="_blank" rel="noopener" href="https://pnpm.io/installation">https://pnpm.io/installation</a></p>
 </li>
 <li><p>拉取博客项目<br>默认采用root用户,后续hexon服务拉取和提交博客代码均需要访问GitHub仓库,建议提前配置好服务器的ssh key访问配置, 确保git命令能正常操作仓库</p>
