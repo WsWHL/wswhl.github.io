@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="WangHailin">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="优雅的Python代码就该这样写"/>
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
+  <meta property="og:site_name" content="This Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://thisblog.cn"/>
+  
+    <link rel="alternate" href="/atom.xml" title="This Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Site Title -->
+  <title>This Blog</title>
+
+  <!-- Bootstrap CSS -->
+  
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  
+  
+<link rel="stylesheet" href="/css/style.light.css">
+
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/default-banner-dark.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">优雅的Python代码就该这样写</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a target="_blank" rel="noopener" href="https://github.com/WsWHL/wswhl.github.io">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:whlsoulmate@gmail.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2020/04/05</span>
+            <span class="time">12:55:25</span>
+          </span>
+          
+          <!--  Categories  -->
+          <span class="categories info">Under 
+
+<a href="/categories/Python/">Python</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+        <div class="post-tags text-muted">
+          Tags: 
+
+<a class="tag" href="/tags/Pythonic/">#Pythonic</a>
+
+
+        </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <h1 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h1><p>Python本就是很高效的开发语言，相比其他语言而言已经很简洁明了。但在实际的编写中，往往会忽略这一点，本该用很简洁高效的写法实现，不仅能够为我们省去繁重的编写工作量，更能利于后期代码的可阅读性和维护。这里就列举一些常用的简洁高效的写法，反例就不在这里列举。</p>
+<span id="more"></span>
+<h1 id="Pythonic"><a href="#Pythonic" class="headerlink" title="Pythonic"></a>Pythonic</h1><p>1.变量交换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">1</span></span><br><span class="line">b = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">a, b = b, a</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;a:%d, b:%d&#x27;</span> % (a, b))</span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>a:2, b:1</p>
+</blockquote>
+<p>2.可迭代对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">	<span class="built_in">print</span>(i)</span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>0<br>1<br>2</p>
+</blockquote>
+<p><em><code>range</code>是python3的写法，在python2中使用的是<code>xrange</code></em></p>
+<p>3.带索引遍历</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">arr = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(arr):</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&#x27;index:%d, value:%d&#x27;</span> % (i, num))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>index:0, value:1<br>index:1, value:3<br>index:2, value:5<br>index:3, value:7<br>index:4, value:9</p>
+</blockquote>
+<p>4.列表推导</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr = [i <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>) <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(arr)</span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>[0, 2, 4, 6, 8]</p>
+</blockquote>
+<p>5.字符串拼接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">names = [<span class="string">&#x27;张三&#x27;</span>, <span class="string">&#x27;李四&#x27;</span>, <span class="string">&#x27;王五&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;,&#x27;</span>.join(names))</span><br></pre></td></tr></table></figure>
+<p>打印输出</p>
+<blockquote>
+<p>张三,李四,王五</p>
+</blockquote>
+<p>6.zip创建键值对</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">keys = [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;sex&#x27;</span>, <span class="string">&#x27;age&#x27;</span>]</span><br><span class="line">values = [<span class="string">&#x27;tim&#x27;</span>, <span class="string">&#x27;male&#x27;</span>, <span class="number">23</span>]</span><br><span class="line"></span><br><span class="line">user = <span class="built_in">dict</span>(<span class="built_in">zip</span>(keys, values))</span><br><span class="line"><span class="built_in">print</span>(user)</span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>{‘name’: ‘tim’, ‘sex’: ‘male’, ‘age’: 23}</p>
+</blockquote>
+<p>7.遍历字典key和value</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user = &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;tim&#x27;</span>, <span class="string">&#x27;sex&#x27;</span>: <span class="string">&#x27;male&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">23</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> user.items():</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&#x27;%s = %s&#x27;</span> % (key, value))</span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>name = tim<br>sex = male<br>age = 23</p>
+</blockquote>
+<p>8.有效值判断</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">&#x27;this blog&#x27;</span></span><br><span class="line">langs = [<span class="string">&#x27;zh&#x27;</span>, <span class="string">&#x27;en&#x27;</span>, <span class="string">&#x27;jp&#x27;</span>]</span><br><span class="line">user = &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;tim&#x27;</span>, <span class="string">&#x27;sex&#x27;</span>: <span class="string">&#x27;male&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">23</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> name <span class="keyword">and</span> langs <span class="keyword">and</span> user:</span><br><span class="line">	<span class="built_in">print</span>(<span class="string">&#x27;True&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><em>空字符串、空列表、空字典都会返回<code>False</code></em><br>打印输出：</p>
+<blockquote>
+<p>True</p>
+</blockquote>
+<p>9.三元运算</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一种写法</span></span><br><span class="line">a = <span class="number">5</span></span><br><span class="line">b = <span class="number">1</span> <span class="keyword">if</span> a &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;b =&#x27;</span>, b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二种写法</span></span><br><span class="line">c = (<span class="number">0</span>, a)[a &gt; <span class="number">0</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;c = &#x27;</span>, c)</span><br></pre></td></tr></table></figure>
+<p><em>第二种是比较晦涩的写法，其实利用的就是逻辑运算结果真或假，程序本身解释便是1或0，然后按照索引取对应的值</em><br>打印输出：</p>
+<blockquote>
+<p>b = 1<br>c =  5</p>
+</blockquote>
+<p>10.打开文件<br>使用<code>with</code>打开文件操作完成后会自动关闭文件，无需手动关闭。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;test.txt&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">	<span class="built_in">print</span>(f.read())</span><br></pre></td></tr></table></figure>
+        </div>
+        <div id="gitalk-container"></div>
+      </div>
+    </div>
+  </div>
+</article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    repo: 'wswhl.github.io',
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false,  // Facebook-like distraction free mode
+    language: 'zh-CN'
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          @2023 <a target="_blank" href="https://github.com/WsWHL/wswhl.github.io">Ws WHL.</a>
+          All Rights Reserved.
+        </p>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+
+<script src="/js/highlight.pack.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+

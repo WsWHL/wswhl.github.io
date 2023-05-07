@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="WangHailin">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="常用排序算法锦集"/>
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
+  <meta property="og:site_name" content="This Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://thisblog.cn"/>
+  
+    <link rel="alternate" href="/atom.xml" title="This Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Site Title -->
+  <title>This Blog</title>
+
+  <!-- Bootstrap CSS -->
+  
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  
+  
+<link rel="stylesheet" href="/css/style.light.css">
+
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/default-banner-dark.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">常用排序算法锦集</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a target="_blank" rel="noopener" href="https://github.com/WsWHL/wswhl.github.io">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:whlsoulmate@gmail.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2020/04/05</span>
+            <span class="time">12:55:25</span>
+          </span>
+          
+          <!--  Categories  -->
+          <span class="categories info">Under 
+
+<a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+        <div class="post-tags text-muted">
+          Tags: 
+
+<a class="tag" href="/tags/sort/">#sort</a>
+
+
+        </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <h3 id="随机数组"><a href="#随机数组" class="headerlink" title="随机数组"></a>随机数组</h3><p>使用numpy生成一维随机数组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(random.randint(<span class="number">100</span>, size=<span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<blockquote>
+<p>[96 53 14 44 39  0 93  2 59 69 22 56 44 81 98  6 93 81 42 34]</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p>冒泡排序是指从第一个元素开始，依次与后面的元素比较，如果比其大就进行交换。直到每个元素遍历比较完成为止。</p>
+<p>算法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sort</span>(<span class="params">arrs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;冒泡排序&quot;&quot;&quot;</span></span><br><span class="line">    length = <span class="built_in">len</span>(arrs)</span><br><span class="line">    <span class="keyword">if</span> length == <span class="number">0</span> <span class="keyword">or</span> length &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> arrs</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(length):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, length):</span><br><span class="line">            <span class="keyword">if</span>(arrs[i] &gt; arrs[j]):</span><br><span class="line">                arrs[i], arrs[j] = arrs[j], arrs[i]</span><br><span class="line">				</span><br><span class="line">    <span class="keyword">return</span> arrs</span><br></pre></td></tr></table></figure>
+
+<h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><p>选择排序是指假设第一个元素为最小，依次与后面元素比较，找出其中最小值的索引，然后与其进行交换。直到每个元素遍历比较完成为止。</p>
+<p>算法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sort</span>(<span class="params">arrs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;选择排序&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> arrs <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> <span class="built_in">len</span>(arrs) &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> arrs</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(arrs):</span><br><span class="line">        <span class="built_in">min</span> = i</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i + <span class="number">1</span>, <span class="built_in">len</span>(arrs)):</span><br><span class="line">            <span class="keyword">if</span> arrs[j] &lt; arrs[<span class="built_in">min</span>]:</span><br><span class="line">                <span class="built_in">min</span> = j</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">min</span> != i <span class="keyword">and</span> arrs[<span class="built_in">min</span>] &lt; num:</span><br><span class="line">            arrs[i], arrs[<span class="built_in">min</span>] = arrs[<span class="built_in">min</span>], arrs[i]</span><br><span class="line">            </span><br><span class="line">    <span class="keyword">return</span> arrs</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h3><p>插入排序是指从第二个元素开始，依次与其前面的元素，从右到左顺序比较，如果比其大则插入到对应元素前面去，<strong><em>交换对应索引</em></strong>继续与前面元素以此比较。</p>
+<p>算法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">sort</span>(<span class="params">arrs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;插入排序&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> arrs <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> <span class="built_in">len</span>(arrs) &lt;= <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(arrs)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">reversed</span>(<span class="built_in">range</span>(i)):</span><br><span class="line">            <span class="keyword">if</span> arrs[i] &lt; arrs[j]:</span><br><span class="line">                arrs[i], arrs[j] = arrs[j], arrs[i]</span><br><span class="line">                i = j</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> arrs</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>不同算法之间由于其时间复杂度不同，其性能也有所差异。</p>
+</blockquote>
+
+        </div>
+        <div id="gitalk-container"></div>
+      </div>
+    </div>
+  </div>
+</article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    repo: 'wswhl.github.io',
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false,  // Facebook-like distraction free mode
+    language: 'zh-CN'
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          @2023 <a target="_blank" href="https://github.com/WsWHL/wswhl.github.io">Ws WHL.</a>
+          All Rights Reserved.
+        </p>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+
+<script src="/js/highlight.pack.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+

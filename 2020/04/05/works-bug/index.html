@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="WangHailin">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="开发中踩过的那些坑..."/>
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
+  <meta property="og:site_name" content="This Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://thisblog.cn"/>
+  
+    <link rel="alternate" href="/atom.xml" title="This Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Site Title -->
+  <title>This Blog</title>
+
+  <!-- Bootstrap CSS -->
+  
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  
+  
+<link rel="stylesheet" href="/css/style.light.css">
+
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/default-banner-dark.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">开发中踩过的那些坑...</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a target="_blank" rel="noopener" href="https://github.com/WsWHL/wswhl.github.io">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:whlsoulmate@gmail.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2020/04/05</span>
+            <span class="time">12:55:25</span>
+          </span>
+          
+          <!--  Categories  -->
+          <span class="categories info">Under 
+
+<a href="/categories/C/">C#</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+        <div class="post-tags text-muted">
+          Tags: 
+
+<a class="tag" href="/tags/debug/">#debug</a>
+
+
+        </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <h1 id="表达式树"><a href="#表达式树" class="headerlink" title="表达式树"></a>表达式树</h1><p>表达式树以树形数据结构表示代码，其中每一个节点都是一种表达式，逻辑以表达式的方式存储在树状结构里，从而可以在运行时去解析这个树，然后执行，实现动态的编辑和执行代码，在不同数据库中执行 LINQ 查询以及创建动态查询。</p>
+<span id="more"></span>
+<p>1.使用lambda表达式创建表达式树</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; expr = num =&gt; num * <span class="number">2</span>;</span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt; result = expr.Compile();</span><br><span class="line">Console.Write(result(<span class="number">5</span>));</span><br></pre></td></tr></table></figure>
+<p>打印输出：</p>
+<blockquote>
+<p>10</p>
+</blockquote>
+<p><em>以上表达式树编译后，返回一个带输入输出参数的委托对象。</em></p>
+<p>2.使用LINQ查询数据时，传递错误的表达式参数导致数据库全表查询。<br>这里只演示LINQ查询时的核心部分代码。</p>
+<ul>
+<li><p>错误使用：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Func&lt;UserInfo, <span class="built_in">bool</span>&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
+<p>SQL</p>
+<blockquote>
+<p>SELECT Id, Name… FROM UserInfo</p>
+</blockquote>
+<p>  <em>以上式例中传递的查询条件并非表示式树，而是一个委托对象。虽然编译时编译器并不会报错，但在实际查询时，监控SQL查询语句你会发现<strong>查询条件并没有包含在SQL语句中</strong>，这样就会导致每次查询时会全表查询，把所有数据加载到内存中，然后使用委托过滤掉。虽然业务实现了，但在大量并发请求时导致的内存消耗无疑是一场灾难。</em></p>
+</li>
+<li><p>正确使用：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;UserInfo, <span class="built_in">bool</span>&gt;&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
+<p>SQL</p>
+<blockquote>
+<p>SELECT Id, Name… FROM UserInfo WHERE Id = 1 AND IsDelete = 0</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="Uri-EscapeDataString"><a href="#Uri-EscapeDataString" class="headerlink" title="Uri.EscapeDataString"></a>Uri.EscapeDataString</h1><blockquote>
+<p><em>.Net HttpClient Invalid URI: The Uri string is too long</em></p>
+</blockquote>
+<p>在使用HttpClient通过Post发送大量数据请求时，报错“无效的URI：Uri字符串太长”，由于转义字符串超过最大长度限制。<br>不同版本（.NET）限制长度：</p>
+<table>
+<thead>
+<tr>
+<th align="left">版本</th>
+<th align="left">限制长度</th>
+<th align="left">有效长度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&lt; 4.5</td>
+<td align="left">32766</td>
+<td align="left">32765</td>
+</tr>
+<tr>
+<td align="left">&gt;= 4.5</td>
+<td align="left">65520</td>
+<td align="left">65519</td>
+</tr>
+<tr>
+<td align="left">解决方案：</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">EncodeString</span>(<span class="params"><span class="built_in">string</span> content</span>)</span>&#123;</span><br><span class="line">	<span class="comment">//maxLengthAllowed .NET &lt; 4.5 = 32765;</span></span><br><span class="line">    <span class="comment">//maxLengthAllowed .NET &gt;= 4.5 = 65519;</span></span><br><span class="line">	<span class="built_in">int</span> maxLengthAllowed = <span class="number">65519</span>;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="built_in">int</span> loops = content.Length / maxLengthAllowed;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt;= loops; i++)&#123;</span><br><span class="line">		sb.Append(Uri.EscapeDataString(i &lt; loops </span><br><span class="line">		? content.Substring(i * maxLengthAllowed, maxLengthAllowed)</span><br><span class="line">		: content.Substring(i * maxLengthAllowed)</span><br><span class="line">		));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> sb.ToString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><em>使用Post发送对象数据时，content格式为“key=value&amp;key1=value1&amp;….”</em></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+
+        </div>
+        <div id="gitalk-container"></div>
+      </div>
+    </div>
+  </div>
+</article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    repo: 'wswhl.github.io',
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false,  // Facebook-like distraction free mode
+    language: 'zh-CN'
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          @2023 <a target="_blank" href="https://github.com/WsWHL/wswhl.github.io">Ws WHL.</a>
+          All Rights Reserved.
+        </p>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+
+<script src="/js/highlight.pack.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+

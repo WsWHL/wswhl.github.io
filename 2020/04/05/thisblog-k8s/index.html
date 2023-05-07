@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="WangHailin">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="Kubernetes This Blog"/>
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
+  <meta property="og:site_name" content="This Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://thisblog.cn"/>
+  
+    <link rel="alternate" href="/atom.xml" title="This Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Site Title -->
+  <title>This Blog</title>
+
+  <!-- Bootstrap CSS -->
+  
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  
+  
+<link rel="stylesheet" href="/css/style.light.css">
+
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/default-banner-dark.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">Kubernetes This Blog</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a target="_blank" rel="noopener" href="https://github.com/WsWHL/wswhl.github.io">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:whlsoulmate@gmail.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2020/04/05</span>
+            <span class="time">12:55:25</span>
+          </span>
+          
+          <!--  Categories  -->
+          <span class="categories info">Under 
+
+<a href="/categories/Deploy/">Deploy</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+        <div class="post-tags text-muted">
+          Tags: 
+
+<a class="tag" href="/tags/Blog/">#Blog</a> <a class="tag" href="/tags/README/">#README</a> <a class="tag" href="/tags/YAML/">#YAML</a>
+
+
+        </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <h2 id="集群部署环境说明"><a href="#集群部署环境说明" class="headerlink" title="集群部署环境说明"></a>集群部署环境说明</h2><pre><code>本文采用gcp云服务部署方案，1 个 vCPU，3.75 GB，单节点部署。</code></pre><h2 id="所需部署服务说明"><a href="#所需部署服务说明" class="headerlink" title="所需部署服务说明"></a>所需部署服务说明</h2><ul>
+<li>mysql, 有状态服务，用于数据持久化存储</li>
+<li>redis，主要用于文章数据缓存，以此提升网站响应速度</li>
+<li>nginx, 用于网站中静态文件发布服务器，与后端服务站点分离以此达到分流效果</li>
+<li>web, 后端站点发布服务</li>
+<li>ingress controller, 路由控制器，实现站点请求路由，以及站点tls配置<span id="more"></span>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2></li>
+</ul>
+<h3 id="PersistentVolumeClaim"><a href="#PersistentVolumeClaim" class="headerlink" title="#PersistentVolumeClaim"></a>#PersistentVolumeClaim</h3><blockquote>
+<p>创建持久化存储卷，有效避免数据丢失。</p>
+</blockquote>
+<ul>
+<li><p>mysql pvc</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">blog-volumeclaim</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">	<span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">	<span class="attr">requests:</span></span><br><span class="line">	  <span class="attr">storage:</span> <span class="string">2Gi</span></span><br></pre></td></tr></table></figure></li>
+<li><p>static file pvc</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">blog-static-volumeclaim</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">	<span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">	<span class="attr">requests:</span></span><br><span class="line">	  <span class="attr">storage:</span> <span class="string">100Mi</span></span><br></pre></td></tr></table></figure></li>
+<li><p>media file pvc</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">blog-media-volumeclaim</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">	<span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">	<span class="attr">requests:</span></span><br><span class="line">	  <span class="attr">storage:</span> <span class="string">512Mi</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="ingress-controller"><a href="#ingress-controller" class="headerlink" title="#ingress controller"></a>#ingress controller</h3><ol>
+<li><p>使用helm添加nginx ingress仓库地址<br><code>helm repo add stable https://kubernetes-charts.storage.googleapis.com</code></p>
+</li>
+<li><p>编写nginx ingress controller配置</p>
+ <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">controller:</span></span><br><span class="line">  <span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line">  <span class="attr">replicaCount:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">updateStrategy:</span> </span><br><span class="line">	<span class="attr">rollingUpdate:</span></span><br><span class="line">	  <span class="attr">maxUnavailable:</span> <span class="number">1</span></span><br><span class="line">	<span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">  <span class="attr">ingressClass:</span> <span class="string">nginx</span></span><br><span class="line">  <span class="attr">service:</span></span><br><span class="line">	<span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">enableHttp:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">enableHttps:</span> <span class="literal">true</span></span><br><span class="line">	<span class="attr">type:</span> <span class="string">LoadBalancer</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">	<span class="attr">requests:</span></span><br><span class="line">	  <span class="attr">cpu:</span> <span class="string">20m</span></span><br><span class="line">	  <span class="attr">memory:</span> <span class="string">64Mi</span></span><br><span class="line">	<span class="attr">limits:</span></span><br><span class="line">	  <span class="attr">cpu:</span> <span class="string">50m</span></span><br><span class="line">	  <span class="attr">memory:</span> <span class="string">256Mi</span></span><br><span class="line">  <span class="attr">defaultBackendService:</span> <span class="string">default/web-service</span></span><br><span class="line"></span><br><span class="line"><span class="attr">defaultBackend:</span></span><br><span class="line">  <span class="attr">enabled:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">rbac:</span></span><br><span class="line">  <span class="attr">create:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p> <strong>* 这里的默认后台服务我是写的自己的站点，格式为namespace/service*</strong></p>
+</li>
+<li><p>安裝nginx ingress controller服务<br><code>helm install nginx-ingress stable/nginx-ingress -f values.yaml</code></p>
+</li>
+</ol>
+<h3 id="mysql"><a href="#mysql" class="headerlink" title="#mysql"></a>#mysql</h3><ul>
+<li><p>deployment</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">matchLabels:</span></span><br><span class="line">	  <span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">	<span class="attr">type:</span> <span class="string">Recreate</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">	<span class="attr">metadata:</span></span><br><span class="line">	  <span class="attr">labels:</span></span><br><span class="line">		<span class="attr">app:</span> <span class="string">mysql</span></span><br><span class="line">	<span class="attr">spec:</span></span><br><span class="line">	  <span class="attr">containers:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">mysql</span></span><br><span class="line">		<span class="attr">image:</span> <span class="string">mysql:latest</span></span><br><span class="line">		<span class="attr">args:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="string">&quot;--default-authentication-plugin=mysql_native_password&quot;</span></span><br><span class="line">		<span class="attr">env:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">MYSQL_DATABASE</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;blog&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">MYSQL_USER</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;root&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">MYSQL_ROOT_PASSWORD</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;123456&quot;</span></span><br><span class="line">		<span class="attr">ports:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3306</span></span><br><span class="line">		  <span class="attr">name:</span> <span class="string">mysql</span></span><br><span class="line">		<span class="attr">volumeMounts:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">mysql-persistent-storage</span></span><br><span class="line">		  <span class="attr">mountPath:</span> <span class="string">/var/lib/mysql</span></span><br><span class="line">		<span class="attr">resources:</span></span><br><span class="line">		  <span class="attr">requests:</span></span><br><span class="line">			<span class="attr">cpu:</span> <span class="string">50m</span></span><br><span class="line">			<span class="attr">memory:</span> <span class="string">512Mi</span></span><br><span class="line">	  <span class="attr">volumes:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">mysql-persistent-storage</span></span><br><span class="line">		<span class="attr">persistentVolumeClaim:</span></span><br><span class="line">		  <span class="attr">claimName:</span> <span class="string">mysql-volumeclaim</span></span><br></pre></td></tr></table></figure></li>
+<li><p>service</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">mysql-service</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ClusterIP</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">3306</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">app:</span> <span class="string">mysql</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="redis"><a href="#redis" class="headerlink" title="#redis"></a>#redis</h3><ul>
+<li><p>deployment</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">redis-server</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">matchLabels:</span></span><br><span class="line">	  <span class="attr">app:</span> <span class="string">redis-server</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">	<span class="attr">metadata:</span></span><br><span class="line">	  <span class="attr">labels:</span></span><br><span class="line">		<span class="attr">app:</span> <span class="string">redis-server</span></span><br><span class="line">	<span class="attr">spec:</span></span><br><span class="line">	  <span class="attr">containers:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">redis-server</span></span><br><span class="line">		<span class="attr">image:</span> <span class="string">redis:latest</span></span><br><span class="line">		<span class="attr">ports:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">6379</span></span><br><span class="line">		<span class="attr">resources:</span></span><br><span class="line">		  <span class="attr">requests:</span></span><br><span class="line">			<span class="attr">cpu:</span> <span class="string">10m</span></span><br><span class="line">			<span class="attr">memory:</span> <span class="string">100Mi</span></span><br><span class="line">		  <span class="attr">limits:</span></span><br><span class="line">			<span class="attr">cpu:</span> <span class="string">10m</span></span><br><span class="line">			<span class="attr">memory:</span> <span class="string">128Mi</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>service</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">redis-service</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">app:</span> <span class="string">redis-serve</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="nginx"><a href="#nginx" class="headerlink" title="#nginx"></a>#nginx</h3><ul>
+<li><p>deployment</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-server</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">matchLabels:</span></span><br><span class="line">	  <span class="attr">app:</span> <span class="string">nginx-server</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">1</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">	<span class="attr">metadata:</span></span><br><span class="line">	  <span class="attr">labels:</span></span><br><span class="line">		<span class="attr">app:</span> <span class="string">nginx-server</span></span><br><span class="line">	<span class="attr">spec:</span></span><br><span class="line">	  <span class="attr">volumes:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-volume</span></span><br><span class="line">		<span class="attr">configMap:</span></span><br><span class="line">		  <span class="attr">name:</span> <span class="string">nginx-config</span></span><br><span class="line">		  <span class="attr">items:</span></span><br><span class="line">		  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">nginx.conf</span></span><br><span class="line">			<span class="attr">path:</span> <span class="string">nginx.conf</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-static-storage</span></span><br><span class="line">		<span class="attr">persistentVolumeClaim:</span></span><br><span class="line">		  <span class="attr">claimName:</span> <span class="string">blog-static-volumeclaim</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-media-storage</span></span><br><span class="line">		<span class="attr">persistentVolumeClaim:</span></span><br><span class="line">		  <span class="attr">claimName:</span> <span class="string">blog-media-volumeclaim</span></span><br><span class="line">	  <span class="attr">containers:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-server</span></span><br><span class="line">		<span class="attr">image:</span> <span class="string">nginx:latest</span></span><br><span class="line">		<span class="attr">ports:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">		<span class="attr">resources:</span></span><br><span class="line">		  <span class="attr">requests:</span></span><br><span class="line">			<span class="attr">cpu:</span> <span class="string">20m</span></span><br><span class="line">			<span class="attr">memory:</span> <span class="string">256Mi</span></span><br><span class="line">		<span class="attr">volumeMounts:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/etc/nginx/conf.d</span></span><br><span class="line">		  <span class="attr">name:</span> <span class="string">nginx-volume</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-static-storage</span></span><br><span class="line">		  <span class="attr">mountPath:</span> <span class="string">/usr/src/app/web/static</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-media-storage</span></span><br><span class="line">		  <span class="attr">mountPath:</span> <span class="string">/usr/src/app/web/media</span></span><br></pre></td></tr></table></figure>
+<p>  <em>* 需要创建<code>nginx.conf</code> configmap配置。</em></p>
+</li>
+<li><p>service</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-service</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">	<span class="attr">app:</span> <span class="string">nginx-service</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">	<span class="attr">targetPort:</span> <span class="number">80</span></span><br><span class="line">	<span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">	<span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">app:</span> <span class="string">nginx-server</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="web"><a href="#web" class="headerlink" title="#web"></a>#web</h3><ul>
+<li><p>deployment</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">web</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span> </span><br><span class="line">	<span class="attr">matchLabels:</span></span><br><span class="line">	  <span class="attr">app:</span> <span class="string">web</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">strategy:</span></span><br><span class="line">	<span class="attr">type:</span> <span class="string">RollingUpdate</span></span><br><span class="line">	<span class="attr">rollingUpdate:</span></span><br><span class="line">	  <span class="attr">maxSurge:</span> <span class="number">25</span><span class="string">%</span></span><br><span class="line">	  <span class="attr">maxUnavailable:</span> <span class="number">25</span><span class="string">%</span></span><br><span class="line">  <span class="attr">minReadySeconds:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">	<span class="attr">metadata:</span></span><br><span class="line">	  <span class="attr">labels:</span></span><br><span class="line">		<span class="attr">app:</span> <span class="string">web</span></span><br><span class="line">	<span class="attr">spec:</span></span><br><span class="line">	  <span class="attr">containers:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">web</span></span><br><span class="line">		<span class="attr">image:</span> <span class="string">asia.gcr.io/whl-vps/blog_web:latest</span></span><br><span class="line">		<span class="attr">command:</span> [<span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;python manage.py rebuild_index --noinput; uwsgi -i uwsgi.ini&quot;</span>]</span><br><span class="line">		<span class="attr">env:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">DEBUG</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">DOMAIN</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">EMAIL_USER</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;9239****@qq.com&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">EMAIL_PASSWORD</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;*****&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">EMAIL_PORT</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;587&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">MYSQL_HOST</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;mysql-service&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">MYSQL_PORT</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;3306&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">MYSQL_DATABASE</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;blog&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">REDIS_HOST</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;redis-service&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">REDIS_PORT</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;6379&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">REDIS_DB</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;0&quot;</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SECRET_KEY</span></span><br><span class="line">		  <span class="attr">value:</span> <span class="string">&quot;*****&quot;</span></span><br><span class="line">		<span class="attr">ports:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">8000</span></span><br><span class="line">		  <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">		<span class="attr">resources:</span></span><br><span class="line">		  <span class="attr">requests:</span></span><br><span class="line">			<span class="attr">cpu:</span> <span class="string">10m</span></span><br><span class="line">			<span class="attr">memory:</span> <span class="string">128Mi</span></span><br><span class="line">		<span class="attr">volumeMounts:</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-static-storage</span></span><br><span class="line">		  <span class="attr">mountPath:</span> <span class="string">/usr/src/app/web/static</span></span><br><span class="line">		<span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-media-storage</span></span><br><span class="line">		  <span class="attr">mountPath:</span> <span class="string">/usr/src/app/web/media</span></span><br><span class="line">	  <span class="attr">volumes:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-static-storage</span></span><br><span class="line">		<span class="attr">persistentVolumeClaim:</span></span><br><span class="line">		  <span class="attr">claimName:</span> <span class="string">blog-static-volumeclaim</span> </span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">blog-media-storage</span></span><br><span class="line">		<span class="attr">persistentVolumeClaim:</span></span><br><span class="line">		  <span class="attr">claimName:</span> <span class="string">blog-media-volumeclaim</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>service</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">web-service</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">	<span class="attr">targetPort:</span> <span class="number">8000</span></span><br><span class="line">	<span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">	<span class="attr">app:</span> <span class="string">web</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ingress</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">extensions/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">web-ingress</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">	<span class="attr">kubernetes.io/ingress.class:</span> <span class="string">nginx</span></span><br><span class="line">	<span class="attr">ingress.kubernetes.io/rewrite-target:</span> <span class="string">/</span></span><br><span class="line">	<span class="attr">nginx.ingress.kubernetes.io/from-to-www-redirect:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">	<span class="attr">nginx.ingress.kubernetes.io/ssl-passthrough:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line">	<span class="attr">nginx.ingress.kubernetes.io/force-ssl-redirect:</span> <span class="string">&quot;true&quot;</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">tls:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">hosts:</span></span><br><span class="line">	<span class="bullet">-</span> <span class="string">www.thisblog.cn</span></span><br><span class="line">	<span class="attr">secretName:</span> <span class="string">tls-secret</span></span><br><span class="line">  <span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">www.thisblog.cn</span></span><br><span class="line">	<span class="attr">http:</span></span><br><span class="line">	  <span class="attr">paths:</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span></span><br><span class="line">		<span class="attr">backend:</span></span><br><span class="line">		  <span class="attr">serviceName:</span> <span class="string">web-service</span></span><br><span class="line">		  <span class="attr">servicePort:</span> <span class="number">80</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">backend:</span></span><br><span class="line">		  <span class="attr">serviceName:</span> <span class="string">nginx-service</span></span><br><span class="line">		  <span class="attr">servicePort:</span> <span class="number">80</span></span><br><span class="line">		<span class="attr">path:</span> <span class="string">/static</span></span><br><span class="line">	  <span class="bullet">-</span> <span class="attr">backend:</span></span><br><span class="line">		  <span class="attr">serviceName:</span> <span class="string">nginx-service</span></span><br><span class="line">		  <span class="attr">servicePort:</span> <span class="number">80</span></span><br><span class="line">		<span class="attr">path:</span> <span class="string">/media</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>tls-secret</p>
+  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">tls-secret</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">tls.crt:</span> <span class="string">&lt;base64&gt;</span></span><br><span class="line">  <span class="attr">tls.key:</span> <span class="string">&lt;base64&gt;</span></span><br></pre></td></tr></table></figure>
+<p>  <strong>* base64编码命令，<code>cat thisblog.cn.key | base64</code> or <code>cat thisblog.cn.crt | base64</code> *</strong></p>
+</li>
+</ul>
+
+        </div>
+        <div id="gitalk-container"></div>
+      </div>
+    </div>
+  </div>
+</article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    repo: 'wswhl.github.io',
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false,  // Facebook-like distraction free mode
+    language: 'zh-CN'
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          @2023 <a target="_blank" href="https://github.com/WsWHL/wswhl.github.io">Ws WHL.</a>
+          All Rights Reserved.
+        </p>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+
+<script src="/js/highlight.pack.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+

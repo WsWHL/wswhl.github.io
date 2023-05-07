@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="WangHailin">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="hexo博客在线编辑同步服务hexon部署"/>
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
+  <meta property="og:site_name" content="This Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://thisblog.cn"/>
+  
+    <link rel="alternate" href="/atom.xml" title="This Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Site Title -->
+  <title>This Blog</title>
+
+  <!-- Bootstrap CSS -->
+  
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  
+  
+<link rel="stylesheet" href="/css/style.light.css">
+
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/default-banner-dark.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">hexo博客在线编辑同步服务hexon部署</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a target="_blank" rel="noopener" href="https://github.com/WsWHL/wswhl.github.io">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:whlsoulmate@gmail.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2023/05/07</span>
+            <span class="time">12:55:25</span>
+          </span>
+          
+          <!--  Categories  -->
+          <span class="categories info">Under 
+
+<a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+        <div class="post-tags text-muted">
+          Tags: 
+
+<a class="tag" href="/tags/Blog/">#Blog</a> <a class="tag" href="/tags/hexon/">#hexon</a> <a class="tag" href="/tags/hexo/">#hexo</a> <a class="tag" href="/tags/linux/">#linux</a>
+
+
+        </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <p>hexo框架是一个主题丰富, 内容简洁的轻量级静态博客框架. 但也正是如此在实际使用中缺陷也很明显, 那就是博客文章内容不方便管理, 每次编写好markdown文件还需要经过hexo命令编译打包推送等步骤, 虽然命令不多, 但体验很不好, 有种很明显的脱离感. 而hexon的出现很好的弥补了这些不足之处, 为<a target="_blank" rel="noopener" href="https://github.com/gethexon/hexon">hexon</a>作者点个大大的赞👍!!!</p>
+<span id="more"></span>
+
+<p>至此, 当我们部署hexon服务后我们可以实现如下效果:</p>
+<ul>
+<li>同步博客git内容, 实现在线编辑并推送, 配置好GitHub Action后可以自动触发部署</li>
+<li>通过hexon编辑博客文章后, 直接在我们的服务器进行打包部署, 编译好的内容将直接推送到GitHub仓库的<code>gp-pages</code>分支实现自动部署, 接管GitHub Action构建功能</li>
+</ul>
+<p>✨准备内容:</p>
+<ul>
+<li>💻一台公网vps服务器, 1G足矣</li>
+<li>🙎GitHub账号, 并初始化好hexo博客仓库</li>
+<li>👋Linux命令基础, 会动的小指头</li>
+<li>🤔️一颗善于思考的小脑瓜…</li>
+</ul>
+<p>项目依赖项<code>git</code>、<code>pnpm</code>、<code>node.js</code>、<code>hexo</code></p>
+<ol>
+<li><p>安装<code>pnpm</code>包管理工具</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash wget -qO- https://get.pnpm.io/install.sh | ENV=&quot;$HOME/.bashrc&quot; SHELL=&quot;$(which bash)&quot; bash -</span><br></pre></td></tr></table></figure>
+<p>这里仅以linux 64位平台举例,具体平台参考官网: <a target="_blank" rel="noopener" href="https://pnpm.io/installation">https://pnpm.io/installation</a></p>
+</li>
+<li><p>拉取博客项目<br>默认采用root用户,后续hexon服务拉取和提交博客代码均需要访问GitHub仓库,建议提前配置好服务器的ssh key访问配置, 确保git命令能正常操作仓库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone git@github.com:&lt;github_name&gt;/&lt;github_name&gt;.github.io.git</span><br><span class="line">npm install -g hexo-cli      # 安装hexo工具</span><br><span class="line">npm install      # 还原博客项目依赖</span><br><span class="line">hexo server   # 可检查博客服务是否能正常启动</span><br></pre></td></tr></table></figure>
+<p>项目同步git时将与拉取分支保持一致, 部署时需要在<code>_config.yml</code>配置中添加如下<code>gh-pages</code>配置信息</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;github_name&gt;/&lt;github_name&gt;.github.io.git</span><br><span class="line">  branch: gh-pages</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<ol>
+<li>拉取hexon项目并还原依赖, 初始化博客配置<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/gethexon/hexon  # 拉取项目</span><br><span class="line">pnpm install     # 还原依赖项</span><br><span class="line">pnpm run setup       # 初始化博客项目路径等配置信息</span><br></pre></td></tr></table></figure></li>
+<li>启动hexon服务<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm start</span><br></pre></td></tr></table></figure>
+默认配置监听本地5777端口,浏览器访问: <a target="_blank" rel="noopener" href="http://localhost:5777">http://localhost:5777</a></li>
+</ol>
+<h4 id="进阶教程-采用systemd部署"><a href="#进阶教程-采用systemd部署" class="headerlink" title="进阶教程, 采用systemd部署"></a>进阶教程, 采用systemd部署</h4><ol>
+<li>创建hexon服务配置<br>创建文件<code>/etc/systemd/system/hexon.service</code>并写入如下配置   <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Hexon Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Environment=NODE_ENV=production</span><br><span class="line">Environment=DEBUG=null</span><br><span class="line">Environment=PATH=/root/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin</span><br><span class="line">WorkingDirectory=/opt/hexon/server</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5s</span><br><span class="line">ExecStart=/root/.local/share/pnpm/node dist/index.js</span><br><span class="line">LimitNOFILE=1048576</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+WorkingDirectory: 设置为我们拉取hexon项目时的文件夹, 启动命令会在该目录下执行<br>User、Group: 服务执行用户信息, 尽量保持和我们在终端执行时的一致, 因为存在上下文依赖关系, 比如git拉取提交项目时需要ssh密钥授权等<blockquote>
+<p>文件中PATH追加了pnpm环境路径<code>/root/.local/share/pnpm</code>很重要, 后续hexon需要执行该路径下的一些命令, 具体路径为我们安装pnpm时所使用的用户主目录下隐藏文件夹中</p>
+</blockquote>
+</li>
+<li>启动hexon守护服务<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable hexon     # 添加自启</span><br><span class="line">systemctl start hexon      # 启动服务</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>启动后查看日志确认是否正常执行<code>journalctl -u hexon -f</code></p>
+</blockquote>
+</li>
+</ol>
+<p>关于hexon不足之处的几点建议:</p>
+<ol>
+<li>希望能够支持插入图片, 并能够配置图床(阿里云、腾讯云等文件存储服务).</li>
+<li>希望能够支持hexo项目设置项的可视化配置, 以此更加方便管理和配置</li>
+<li>希望登录授权支持双因子认证(2FA), 从而提高后台服务安全性</li>
+<li>其他内容待后续充分体验后补充…</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/gethexon/hexon">鸣谢项目hexon!!!</a></p>
+
+        </div>
+        <div id="gitalk-container"></div>
+      </div>
+    </div>
+  </div>
+</article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    repo: 'wswhl.github.io',
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false,  // Facebook-like distraction free mode
+    language: 'zh-CN'
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          @2023 <a target="_blank" href="https://github.com/WsWHL/wswhl.github.io">Ws WHL.</a>
+          All Rights Reserved.
+        </p>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+
+<script src="/js/highlight.pack.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+

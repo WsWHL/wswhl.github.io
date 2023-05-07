@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <!-- Html Head Tag-->
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="WangHailin">
+  <!-- Open Graph Data -->
+  <meta property="og:title" content="Elasticsearch parent child索引构建"/>
+  <meta property="og:description" content="个人博客站点，记录开发中的知识点。分享一些干货。" />
+  <meta property="og:site_name" content="This Blog"/>
+  <meta property="og:type" content="article" />
+  <meta property="og:image" content="https://thisblog.cn"/>
+  
+    <link rel="alternate" href="/atom.xml" title="This Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Site Title -->
+  <title>This Blog</title>
+
+  <!-- Bootstrap CSS -->
+  
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  
+  
+<link rel="stylesheet" href="/css/style.light.css">
+
+
+  <!-- Google Analytics -->
+  
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+  <body>
+    <!-- Page Header -->
+
+
+<header class="site-header header-background" style="background-image: url(/img/default-banner-dark.jpg)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="page-title with-background-image">
+          <p class="title">Elasticsearch parent child索引构建</p>
+          <p class="subtitle"></p>
+        </div>
+        <div class="site-menu with-background-image">
+          <ul>
+            
+              <li>
+                <a href="/">
+                  
+                  Home
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  
+                  Archives
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a target="_blank" rel="noopener" href="https://github.com/WsWHL/wswhl.github.io">
+                  
+                  Github
+                  
+                </a>
+              </li>
+            
+              <li>
+                <a href="mailto:whlsoulmate@gmail.com">
+                  
+                  Email
+                  
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<article>
+  <div class="container typo">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-info text-muted">
+          
+          <!-- Author -->
+          <span class="author info">By WangHailin</span>
+          
+          <!-- Date -->
+          <span class="date-time info">On
+            <span class="date">2020/04/05</span>
+            <span class="time">12:55:25</span>
+          </span>
+          
+          <!--  Categories  -->
+          <span class="categories info">Under 
+
+<a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>
+</span>
+          
+        </div>
+        <!-- Tags -->
+        
+        <div class="post-tags text-muted">
+          Tags: 
+
+<a class="tag" href="/tags/Elasticsearch/">#Elasticsearch</a> <a class="tag" href="/tags/Indexer/">#Indexer</a>
+
+
+        </div>
+        
+        <!-- Post Main Content -->
+        <div class="post-content">
+          <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>我们在使用es查询客户端时，需要注意客户端版本是否与服务端版本兼容，因为不同版本所生成的查询语法可能会有很大的差别，以至于出现查询异常，或完全无效的情况，所以要使用对应版本和对应语法编写。<span id="more"></span></li>
+<li>有些特殊的查询语法，对索引的创建方式严格的要求，且无法直接在创建后去进行修改实现。例如：默认字段查询时是以<code>Match</code>分词进行匹配，如果要使用<code>term</code>查询方式，则需要将对于字段设置为<code>keyword</code>类型，某则该查询语法无效，或者匹配到不完全一致的结果，部分特殊字段也需要特殊处理，比如ip、邮箱、编号等这一类。</li>
+<li>Parent Child Query结构，只能建立一种文档关联关系，从而避免一个文档冗余数据太多影响查询效率。</li>
+</ul>
+<h2 id="Parent-Child-Query"><a href="#Parent-Child-Query" class="headerlink" title="Parent Child Query"></a>Parent Child Query</h2><h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><p>这里就简单的使用es官网的一个例子。</p>
+<ul>
+<li><p>编写模型类</p>
+  <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">MyDocument</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">int</span> Id &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">	<span class="keyword">public</span> JoinField MyJoinField &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyParent</span> : <span class="title">MyDocument</span></span><br><span class="line">&#123;</span><br><span class="line">	[<span class="meta">Text</span>]</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">string</span> ParentProperty &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyChild</span> : <span class="title">MyDocument</span></span><br><span class="line">&#123;</span><br><span class="line">	[<span class="meta">Text</span>]</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">string</span> ChildProperty &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyChild1</span> : <span class="title">MyDocument</span></span><br><span class="line">&#123;</span><br><span class="line">	[<span class="meta">Text</span>]</span><br><span class="line">	<span class="keyword">public</span> <span class="built_in">string</span> ChildProperty &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建索引</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> createIndexResponse = client.Indices.Create(<span class="string">&quot;index&quot;</span>, c =&gt; c</span><br><span class="line">    .Index&lt;MyDocument&gt;()</span><br><span class="line">    .Map&lt;MyDocument&gt;(m =&gt; m</span><br><span class="line">        .RoutingField(r =&gt; r.Required()) </span><br><span class="line">        .AutoMap&lt;MyParent&gt;() </span><br><span class="line">        .AutoMap&lt;MyChild&gt;() </span><br><span class="line">		.AutoMap&lt;MyChild1&gt;()</span><br><span class="line">        .Properties(props =&gt; props</span><br><span class="line">            .Join(j =&gt; j </span><br><span class="line">                .Name(p =&gt; p.MyJoinField)</span><br><span class="line">                .Relations(r =&gt; r</span><br><span class="line">                    .Join&lt;MyParent&gt;(<span class="keyword">typeof</span>(MyChild), <span class="keyword">typeof</span>(MyChild1))</span><br><span class="line">                )</span><br><span class="line">            )</span><br><span class="line">			.Keyword(s =&gt; s.Name(f =&gt; f.Id))</span><br><span class="line">			.Keyword(s =&gt; <span class="keyword">new</span> KeywordPropertyDescriptor&lt;MyChild1&gt;().Name(f =&gt; f.ChildProperty))</span><br><span class="line">        )</span><br><span class="line">    )</span><br><span class="line">);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>* 查询索引映射信息：<code>/index/_mapping</code>，所以要想修改索引映射信息只能删除重建 *</strong></p>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><p>主要有四种查询方式：</p>
+<ol>
+<li><p>Parent Id Query</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">q</span><br><span class="line">.ParentId(p =&gt; p</span><br><span class="line">    .Type&lt;MyDocument&gt;()</span><br><span class="line">    .Id(MyParent.Id)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以根据父Id，找出所有相关的子类型数据。</p>
+</blockquote>
+</li>
+<li><p>Has Parent Query</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q</span><br><span class="line">.HasParent&lt;MyParent&gt;(c =&gt; c</span><br><span class="line">    .Query(qq =&gt; qq.MatchAll())</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以根据父类的相关属性匹配出对应关联的子类数据。</p>
+</blockquote>
+</li>
+<li><p>Has Child Query</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">q</span><br><span class="line">.HasChild&lt;MyChild&gt;(c =&gt; c</span><br><span class="line">    .MaxChildren(<span class="number">5</span>)</span><br><span class="line">    .MinChildren(<span class="number">1</span>)</span><br><span class="line">    .ScoreMode(ChildScoreMode.Average)</span><br><span class="line">    .Query(qq =&gt; qq.MatchAll())</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以根据子类的相关属性，匹配出子类关联的父类数据。</p>
+</blockquote>
+</li>
+<li><p>Find JoinField Type</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">q</span><br><span class="line">.HasRelationName&lt;MyParent&gt;(x =&gt; x.MyJoinField)</span><br><span class="line">.MatchAll()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以根据指定JoinField类型筛选相关数据。</p>
+</blockquote>
+<p> 备注：查询时并不能像常规的关系型数据库进行联合查询，因此当我们需要根据父类型和子类型属性进行数据筛选时，最好将相关字段数据冗余到一个类型，这样可以方便的查询。</p>
+</li>
+</ol>
+
+        </div>
+        <div id="gitalk-container"></div>
+      </div>
+    </div>
+  </div>
+</article>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+  const gitalk = new Gitalk({
+    clientID: 'b3b5f07c8fe4c7f597ff',
+    clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+    repo: 'wswhl.github.io',
+    owner: 'WsWHL',
+    admin: ['WsWHL'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false,  // Facebook-like distraction free mode
+    language: 'zh-CN'
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+
+    <!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          @2023 <a target="_blank" href="https://github.com/WsWHL/wswhl.github.io">Ws WHL.</a>
+          All Rights Reserved.
+        </p>
+        <p class="copyright text-muted">
+          Powered By <a target="_blank" href="https://hexo.io/">Hexo.</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <!-- After Footer Scripts -->
+
+<script src="/js/highlight.pack.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    var codeBlocks = Array.prototype.slice.call(document.getElementsByTagName('pre'))
+    codeBlocks.forEach(function(block, index) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+  </body>
+</html>
+
