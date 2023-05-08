@@ -72,8 +72,6 @@ deploy:
    After=network.target
 
    [Service]
-   Environment=NODE_ENV=production
-   Environment=DEBUG=null
    Environment=PATH=/root/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
    WorkingDirectory=/opt/hexon/server
    Type=simple
@@ -81,13 +79,13 @@ deploy:
    Group=root
    Restart=on-failure
    RestartSec=5s
-   ExecStart=/root/.local/share/pnpm/node dist/index.js
+   ExecStart=pnpm cross-env NODE_ENV=production node dist/index.js
    LimitNOFILE=1048576
 
    [Install]
    WantedBy=multi-user.target
    ```
-   WorkingDirectory: 设置为我们拉取hexon项目时的文件夹, 启动命令会在该目录下执行
+   WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动命令会在该目录下执行
    User、Group: 服务执行用户信息, 尽量保持和我们在终端执行时的一致, 因为存在上下文依赖关系, 比如git拉取提交项目时需要ssh密钥授权等
    > 文件中PATH追加了pnpm环境路径`/root/.local/share/pnpm`很重要, 后续hexon需要执行该路径下的一些命令, 具体路径为我们安装pnpm时所使用的用户主目录下隐藏文件夹中
 2. 启动hexon守护服务
