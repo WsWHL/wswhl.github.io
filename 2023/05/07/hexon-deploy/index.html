@@ -35,7 +35,6 @@
 
   <!-- Google Analytics -->
   
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GM8KTFQJNV"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -114,7 +113,7 @@
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2023/05/07</span>
-            <span class="time">21:04:13</span>
+            <span class="time">10:40:55</span>
           </span>
           
           <!--  Categories  -->
@@ -171,8 +170,8 @@
 默认配置监听本地5777端口,浏览器访问: <a target="_blank" rel="noopener" href="http://localhost:5777">http://localhost:5777</a></li>
 </ol>
 <h4 id="进阶教程-采用systemd部署"><a href="#进阶教程-采用systemd部署" class="headerlink" title="进阶教程, 采用systemd部署"></a>进阶教程, 采用systemd部署</h4><ol>
-<li>创建hexon服务配置<br>创建文件<code>/etc/systemd/system/hexon.service</code>并写入如下配置   <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Hexon Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Environment=NODE_ENV=production</span><br><span class="line">Environment=DEBUG=null</span><br><span class="line">Environment=PATH=/root/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin</span><br><span class="line">WorkingDirectory=/opt/hexon/server</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5s</span><br><span class="line">ExecStart=/root/.local/share/pnpm/node dist/index.js</span><br><span class="line">LimitNOFILE=1048576</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-WorkingDirectory: 设置为我们拉取hexon项目时的文件夹, 启动命令会在该目录下执行<br>User、Group: 服务执行用户信息, 尽量保持和我们在终端执行时的一致, 因为存在上下文依赖关系, 比如git拉取提交项目时需要ssh密钥授权等<blockquote>
+<li>创建hexon服务配置<br>创建文件<code>/etc/systemd/system/hexon.service</code>并写入如下配置   <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Hexon Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Environment=PATH=/root/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin</span><br><span class="line">WorkingDirectory=/opt/hexon/server</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5s</span><br><span class="line">ExecStart=pnpm cross-env NODE_ENV=production node dist/index.js</span><br><span class="line">LimitNOFILE=1048576</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动命令会在该目录下执行<br>User、Group: 服务执行用户信息, 尽量保持和我们在终端执行时的一致, 因为存在上下文依赖关系, 比如git拉取提交项目时需要ssh密钥授权等<blockquote>
 <p>文件中PATH追加了pnpm环境路径<code>/root/.local/share/pnpm</code>很重要, 后续hexon需要执行该路径下的一些命令, 具体路径为我们安装pnpm时所使用的用户主目录下隐藏文件夹中</p>
 </blockquote>
 </li>
