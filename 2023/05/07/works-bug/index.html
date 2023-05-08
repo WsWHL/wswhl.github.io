@@ -219,13 +219,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2020-04-05 14:34:36</span>
-        <span class="mobile">2020-04-05 14:34</span>
+        <span class="pc">2023-05-07 08:28:08</span>
+        <span class="mobile">2023-05-07 08:28</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2023-05-07 08:28:08</span>
+        <span class="pc">2023-05-08 16:44:58</span>
     </span>
     
     
@@ -316,22 +316,10 @@
 <td align="left">65520</td>
 <td align="left">65519</td>
 </tr>
-<tr>
-<td align="left">解决方案：</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">EncodeString</span>(<span class="params"><span class="built_in">string</span> content</span>)</span>&#123;</span><br><span class="line">	<span class="comment">//maxLengthAllowed .NET &lt; 4.5 = 32765;</span></span><br><span class="line">    <span class="comment">//maxLengthAllowed .NET &gt;= 4.5 = 65519;</span></span><br><span class="line">	<span class="built_in">int</span> maxLengthAllowed = <span class="number">65519</span>;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="built_in">int</span> loops = content.Length / maxLengthAllowed;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt;= loops; i++)&#123;</span><br><span class="line">		sb.Append(Uri.EscapeDataString(i &lt; loops </span><br><span class="line">		? content.Substring(i * maxLengthAllowed, maxLengthAllowed)</span><br><span class="line">		: content.Substring(i * maxLengthAllowed)</span><br><span class="line">		));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> sb.ToString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><em>使用Post发送对象数据时，content格式为“key=value&amp;key1=value1&amp;….”</em></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
 </tbody></table>
+<p>解决方案：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">EncodeString</span>(<span class="params"><span class="built_in">string</span> content</span>)</span>&#123;</span><br><span class="line">	<span class="comment">//maxLengthAllowed .NET &lt; 4.5 = 32765;</span></span><br><span class="line">    <span class="comment">//maxLengthAllowed .NET &gt;= 4.5 = 65519;</span></span><br><span class="line">	<span class="built_in">int</span> maxLengthAllowed = <span class="number">65519</span>;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="built_in">int</span> loops = content.Length / maxLengthAllowed;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt;= loops; i++)&#123;</span><br><span class="line">		sb.Append(Uri.EscapeDataString(i &lt; loops </span><br><span class="line">		? content.Substring(i * maxLengthAllowed, maxLengthAllowed)</span><br><span class="line">		: content.Substring(i * maxLengthAllowed)</span><br><span class="line">		));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> sb.ToString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><em>使用Post发送对象数据时，content格式为“key=value&amp;key1=value1&amp;….”</em></p>
 
             </div>
 
@@ -347,10 +335,10 @@
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2020-04-05 14:34:36</span>
+            <span class="type">创建时间</span>：<span class="content">2023-05-07 08:28:08</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2020/04/05/works-bug/</span>
+            <span class="type">本文链接</span>：<span class="content">2023/05/07/works-bug/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -380,13 +368,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2020/04/05/sorts/"
+                               href="/2023/05/07/hexon-deploy/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">常用排序算法锦集</span>
+                                <span class="post-nav-title-item">hexo博客在线编辑同步服务hexon部署</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -396,10 +384,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2020/04/05/pythonic/"
+                               href="/2020/04/05/thisblog-k8s/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">优雅的Python代码就该这样写</span>
+                                <span class="post-nav-title-item">Kubernetes This Blog</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
