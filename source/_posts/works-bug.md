@@ -1,10 +1,8 @@
----
 title: 开发中踩过的那些坑...
-date: 2020-04-05 14:34:36
-categories:
-  - C#
 tags:
   - debug
+categories:
+  - C#
 ---
 # 表达式树
 表达式树以树形数据结构表示代码，其中每一个节点都是一种表达式，逻辑以表达式的方式存储在树状结构里，从而可以在运行时去解析这个树，然后执行，实现动态的编辑和执行代码，在不同数据库中执行 LINQ 查询以及创建动态查询。
@@ -49,13 +47,14 @@ SQL
 | 版本  | 限制长度  | 有效长度  |
 | :------------ | :------------ | :------------ |
 |  < 4.5   |  32766  | 32765   |
-|  >= 4.5 | 65520   | 65519   |
+|  >= 4.5 | 65520   | 65519   | 
+
 解决方案：
 ``` C#
 public static string EncodeString(string content){
-	//maxLengthAllowed .NET < 4.5 = 32765;
-    //maxLengthAllowed .NET >= 4.5 = 65519;
-	int maxLengthAllowed = 65519;
+    // maxLengthAllowed .NET < 4.5 = 32765;
+    // maxLengthAllowed .NET >= 4.5 = 65519;
+    int maxLengthAllowed = 65519;
     StringBuilder sb = new StringBuilder();
 	int loops = content.Length / maxLengthAllowed;
 	
@@ -68,6 +67,5 @@ public static string EncodeString(string content){
 		return sb.ToString();
 	}
 }
-
 ```
 *使用Post发送对象数据时，content格式为“key=value&key1=value1&....”*

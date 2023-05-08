@@ -94,8 +94,15 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: aero-dual 
+theme: keep 
 #theme_style: dark
+
+# Local search
+search:
+  path: search.json
+  field: post
+  content: true
+  format: striptags
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
