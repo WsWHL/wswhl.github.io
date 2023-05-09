@@ -107,7 +107,7 @@ social_contact:
     # at the same time change your link to the image link.
     # e.g. [ weixin: img | https://x.com/images/wechat.png ] or [ weixin: img | ./images/wechat.png ]
     github: https://github.com/WsWHL        # GitHub
-    weixin: img | ./images/reward.jpg     # WeChat
+    weixin: img | ./images/wechat-donate.jpg     # WeChat
     qq:              # QQ
     weibo:           # WeiBo
     zhihu:           # ZhiHu
