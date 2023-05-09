@@ -1,6 +1,7 @@
 ---
 title: RabbitMQ Delayed Message
-date: 2020-04-05 14:45:20
+date: '2020-04-05 14:45:20'
+updated: '2020-04-05 14:45:20'
 categories: 
   - 每日一记
 tags:

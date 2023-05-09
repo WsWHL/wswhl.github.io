@@ -1,6 +1,7 @@
 ---
 title: 优雅的Python代码就该这样写
-date: 2020-04-05 14:32:39
+date: '2020-04-05 14:32:39'
+updated: '2020-04-05 14:32:39'
 categories:
   - Python
 tags:

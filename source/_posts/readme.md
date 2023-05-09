@@ -1,15 +1,16 @@
----
 title: This Blog README
-date: 2020-04-05 10:06:41
+date: '2020-04-05 10:06:41'
+updated: '2023-05-09 14:23:13'
+tags:
+  - Blog
+  - README
 categories:
   - Deploy
-tags:
-  - Blog 
-  - README
 ---
 ## 介绍
-​		本项目是使用Python语言开发的Blog网站。后端使用的是Django框架，前段使用的是Foundation JavaScript库。
-> 在线网站[https://thisblog.cn](https://thisblog.cn),期待你的加入！
+
+本项目是使用Python语言开发的Blog网站。后端使用的是Django框架，前段使用的是Foundation JavaScript库。
+仓库地址：https://github.com/WsWHL/blog
 <!--more -->
 ## 环境
 * 开发工具：vs code

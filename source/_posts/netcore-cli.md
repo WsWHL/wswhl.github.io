@@ -1,6 +1,7 @@
 ---
 title: .NET Core CLI命令
-date: 2020-04-05 14:41:21
+date: '2020-04-05 14:41:21'
+updated: '2020-04-05 14:41:21'
 categories:
   - C#
   - .NET Core

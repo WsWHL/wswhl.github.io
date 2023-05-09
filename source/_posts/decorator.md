@@ -1,6 +1,7 @@
 ---
 title: Python装饰器
-date: 2020-04-05 10:08:19
+date: '2020-04-05 10:08:19'
+updated: '2020-04-05 10:08:19'
 categories:
   - Python
 tags:

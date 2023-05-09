@@ -1,6 +1,7 @@
 ---
 title: Elasticsearch parent child索引构建
-date: 2020-04-05 14:49:16
+date: '2020-04-05 14:49:16'
+updated: '2020-04-05 14:49:16'
 categories: 
   - 每日一记
 tags:
