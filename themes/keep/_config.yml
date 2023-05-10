@@ -194,10 +194,10 @@ website_count:
   # busuanzi
   # See: http://ibruce.info/2015/04/04/busuanzi/
   busuanzi_count:
-    enable: false     # Option values: true | false
+    enable: true     # Option values: true | false
     site_uv: false    # Option values: true | false
     site_pv: false    # Option values: true | false
-    page_pv: false    # Option values: true | false
+    page_pv: true   # Option values: true | false
 
 # ---------------------------------------------------------------------------------------
 # Local Search
@@ -235,7 +235,7 @@ comment:
     repository: wswhl.github.io      # Repository name to store issues
     client_id: b3b5f07c8fe4c7f597ff      # GitHub Application Client ID
     client_secret: 483270e7edc6f87983b5b70eba61a1e877c4f58d  # GitHub Application Client Secret
-    proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token           # GitHub oauth request reverse proxy for CORS
+    proxy: https://cors.thisblog.cn/https://github.com/login/oauth/access_token           # GitHub oauth request reverse proxy for CORS
 
   # Twikoo
   # See: https://github.com/imaegoo/twikoo
