@@ -34,6 +34,26 @@
                 </ul>
             </span>
         <% } %>
+	<%
+	let temp_wordcount_count, temp_min2read_count = null
+	try {
+		temp_wordcount_count = wordcount(post.content)
+		temp_min2read_count = min2read(post.content)
+	} catch (e) {
+		temp_wordcount_count = 0
+		temp_min2read_count = 0
+	}
+        %>
+        <% if(theme.hasOwnProperty('post') && theme.post.word_count.enable && theme.post.word_count.wordcount && temp_wordcount_count){ %>
+            <span class="article-wordcount article-meta-item">
+                <i class="fas fa-file-word"></i>&nbsp;<span><%= temp_wordcount_count %> <%- __('wordcount') %></span>
+            </span>
+        <% } %>
+        <% if(theme.hasOwnProperty('post') && theme.post.word_count.enable && theme.post.word_count.min2read && temp_min2read_count){ %>
+            <span class="article-min2read article-meta-item">
+                <i class="fas fa-clock"></i>&nbsp;<span><%= temp_min2read_count %> <%- __('min2read') %></span>
+            </span>
+        <% } %>
     </div>
 
     <a class="read-more" href="<%- url_for(post.path) %>"><%- __('read_more') %>&nbsp;<i class="fas fa-angle-right"></i></a>
