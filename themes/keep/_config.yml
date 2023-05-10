@@ -235,7 +235,7 @@ comment:
     repository: wswhl.github.io      # Repository name to store issues
     client_id: b3b5f07c8fe4c7f597ff      # GitHub Application Client ID
     client_secret: 483270e7edc6f87983b5b70eba61a1e877c4f58d  # GitHub Application Client Secret
-    proxy: https://cors.thisblog.cn/https://github.com/login/oauth/access_token           # GitHub oauth request reverse proxy for CORS
+    proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token           # GitHub oauth request reverse proxy for CORS
 
   # Twikoo
   # See: https://github.com/imaegoo/twikoo
