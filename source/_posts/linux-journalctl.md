@@ -1,4 +1,4 @@
-title: linux日志查询journalctl命令使用手册
+title: Linux日志查询命令journalctl使用手册
 date: '2023-05-10 17:02:28'
 updated: '2023-05-10 17:02:30'
 tags:
@@ -7,6 +7,7 @@ categories:
   - 每日一记
 ---
 对于采用systemd管理服务的系统下，默认存在`systemd-journald`日志服务，并提供了`journalctl`命令查询记录的日志信息。
+<!-- more -->
 
 #### 常用命令
 
