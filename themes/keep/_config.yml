@@ -77,7 +77,7 @@ style:
     progress_bar: true # Option values: true | false
 
     # Show percent when page scroll
-    percent: true      # Option values: true | false
+    percent: false      # Option values: true | false
 
 # ---------------------------------------------------------------------------------------
 # Navigation menu
@@ -282,7 +282,7 @@ cdn:
 # Docs: https://keep-docs.xpoet.cn/tutorial/configuration-guide/pjax.html
 # ---------------------------------------------------------------------------------------
 pjax:
-  enable: false  # Option values: true | false
+  enable: true  # Option values: true | false
 
 # ---------------------------------------------------------------------------------------
 # Footer settings
