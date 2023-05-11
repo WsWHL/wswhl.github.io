@@ -24,7 +24,7 @@
     <script id="hexo-configurations">
     let KEEP = window.KEEP || {}
     KEEP.hexo_config = {"hostname":"thisblog.cn","root":"/","language":"zh-CN","path":"search.json"}
-    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066cc","logo":"/favicon.ico","favicon":"/favicon.ico","avatar":"/images/avatar.jpg","font_size":null,"font_family":"FiraCode-Regular","hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"header_transparent":true,"background_img":"/images/bg.svg","description":"走过很多路，看过很多风景 || 可依然过不好这一生...","font_color":null,"hitokoto":true},"scroll":{"progress_bar":true,"percent":true}},"local_search":{"enable":true,"preload":true},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"side_tools":{},"pjax":{"enable":false},"lazyload":{"enable":true},"comment":{"enable":true,"use":"gitalk","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":"WsWHL","github_admins":["WsWHL"],"repository":"wswhl.github.io","client_id":"b3b5f07c8fe4c7f597ff","client_secret":"483270e7edc6f87983b5b70eba61a1e877c4f58d","proxy":"https://cors.thisblog.cn/https://github.com/login/oauth/access_token"},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_label":{"enable":true,"auto":true},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":true},"version":"3.6.1"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066cc","logo":"/favicon.ico","favicon":"/favicon.ico","avatar":"/images/avatar.jpg","font_size":null,"font_family":null,"hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"header_transparent":true,"background_img":"/images/bg.svg","description":"走过很多路，看过很多风景 || 可依然过不好这一生...","font_color":null,"hitokoto":true},"scroll":{"progress_bar":true,"percent":true}},"local_search":{"enable":true,"preload":true},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"side_tools":{},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":true,"use":"gitalk","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":"WsWHL","github_admins":["WsWHL"],"repository":"wswhl.github.io","client_id":"b3b5f07c8fe4c7f597ff","client_secret":"483270e7edc6f87983b5b70eba61a1e877c4f58d","proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_label":{"enable":true,"auto":true},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":true},"version":"3.6.1"}
     KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
     KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
     KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
@@ -48,6 +48,9 @@
         <span class="scroll-progress-bar"></span>
     
 
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
     
 </div>
 
@@ -196,7 +199,7 @@
                         <div class="author">
                             <span class="name">WsWHL</span>
                             
-                                <span class="author-label">Lv2</span>
+                                <span class="author-label">Lv3</span>
                             
                         </div>
                         <div class="meta-info">
@@ -233,7 +236,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Blog/">Blog</a>&nbsp;
+                        <a href="/tags/linux/">linux</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Blog/">Blog</a>&nbsp;
                     </li>
                 
                     <li>
@@ -244,10 +251,6 @@
                         | <a href="/tags/hexo/">hexo</a>&nbsp;
                     </li>
                 
-                    <li>
-                        | <a href="/tags/linux/">linux</a>&nbsp;
-                    </li>
-                
             </ul>
         </span>
     
@@ -255,7 +258,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>984 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>985 字</span>
         </span>
     
     
@@ -263,10 +266,6 @@
             <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
-    
-        <span class="article-pv article-meta-item">
-            <i class="fas fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
-        </span>
     
 </div>
 
@@ -304,13 +303,13 @@
 <p>项目同步git时将与拉取分支保持一致, 部署时需要在<code>_config.yml</code>配置中添加如下<code>gh-pages</code>配置信息</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;github_name&gt;/&lt;github_name&gt;.github.io.git</span><br><span class="line">  branch: gh-pages</span><br></pre></td></tr></table></figure>
 
-
 </li>
-</ol>
-<ol>
-<li>拉取hexon项目并还原依赖, 初始化博客配置<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/gethexon/hexon  # 拉取项目</span><br><span class="line">pnpm install     # 还原依赖项</span><br><span class="line">pnpm run setup       # 初始化博客项目路径等配置信息</span><br></pre></td></tr></table></figure></li>
-<li>启动hexon服务<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm start</span><br></pre></td></tr></table></figure>
-默认配置监听本地5777端口,浏览器访问: <a class="link"   target="_blank" rel="noopener" href="http://localhost:5777" >http://localhost:5777<i class="fas fa-external-link-alt"></i></a></li>
+<li><p>拉取hexon项目并还原依赖, 初始化博客配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/gethexon/hexon  # 拉取项目</span><br><span class="line">pnpm install     # 还原依赖项</span><br><span class="line">pnpm run setup       # 初始化博客项目路径等配置信息</span><br></pre></td></tr></table></figure></li>
+<li><p>启动hexon服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm start</span><br></pre></td></tr></table></figure>
+<p>默认配置监听本地5777端口,浏览器访问: <a class="link"   target="_blank" rel="noopener" href="http://localhost:5777/" >http://localhost:5777<i class="fas fa-external-link-alt"></i></a></p>
+</li>
 </ol>
 <h4 id="进阶教程-采用systemd部署"><a href="#进阶教程-采用systemd部署" class="headerlink" title="进阶教程, 采用systemd部署"></a>进阶教程, 采用systemd部署</h4><ol>
 <li>创建hexon服务配置<br>创建文件<code>/etc/systemd/system/hexon.service</code>并写入如下配置   <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Hexon Service</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Environment=PATH=/root/.local/share/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin</span><br><span class="line">WorkingDirectory=/opt/hexon/server</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5s</span><br><span class="line">ExecStart=pnpm cross-env NODE_ENV=production node dist/index.js</span><br><span class="line">LimitNOFILE=1048576</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
@@ -368,6 +367,10 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
+                            <a href="/tags/linux/">#linux</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
                             <a href="/tags/Blog/">#Blog</a>&nbsp;
                         </li>
                     
@@ -379,15 +382,26 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
                             <a href="/tags/hexo/">#hexo</a>&nbsp;
                         </li>
                     
-                        <li class="tag-item">
-                            <a href="/tags/linux/">#linux</a>&nbsp;
-                        </li>
-                    
                 </ul>
             
 
             
                 <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2023/05/10/centos-dnf-makecache/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item">解决centos dnf自动更新异常问题</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
                     
                     
                         <div class="article-next">
@@ -423,8 +437,8 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
     <div class="gitalk-comment-container">
         <div id="gitalk-container"></div>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
-        <script  src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
-        <script >
+        <script data-pjax src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+        <script data-pjax>
           function loadGitalk() {
             let __gitalk__pathname = decodeURI(location.pathname);
             const __gitalk__pathnameLength = __gitalk__pathname.length;
@@ -441,7 +455,7 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
                 owner: 'WsWHL',
                 admin: 'WsWHL',
                 id: __gitalk__pathname,
-                proxy: 'https://cors.thisblog.cn/https://github.com/login/oauth/access_token',
+                proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token',
                 language: 'zh-CN'
               }).render('gitalk-container');
             } catch (e) {
@@ -449,7 +463,7 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
             }
           }
 
-          if ('false' === 'true') {
+          if ('true' === 'true') {
             const loadGitalkTimeout = setTimeout(() => {
               loadGitalk();
               clearTimeout(loadGitalkTimeout);
@@ -502,13 +516,6 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
                 &nbsp;<a href="/">WsWHL</a>
             
         </div>
-        
-            <script async 
-                    src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-            <div class="website-count info-item">
-                
-                
-            </div>
         
         <div class="theme-info info-item">
             由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.6.1</a>
@@ -651,7 +658,7 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
     <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/lazyload.js"></script>
 
 
-<div class="post-scripts">
+<div class="post-scripts pjax">
     
         <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/post-helper.js"></script>
         
@@ -662,6 +669,38 @@ WorkingDirectory: 设置为我们拉取hexon项目下的server文件夹, 启动�
         
     
 </div>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            KEEP.refresh();
+        });
+    });
+</script>
 
 
 

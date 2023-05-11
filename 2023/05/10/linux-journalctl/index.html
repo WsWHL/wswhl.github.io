@@ -9,7 +9,7 @@
     
     <title>
         
-            开发中踩过的那些坑... |
+            Linux日志查询命令journalctl使用手册 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">开发中踩过的那些坑...</span>
+                <span class="title-hover-animation">Linux日志查询命令journalctl使用手册</span>
             </div>
 
             
@@ -209,13 +209,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2020-04-04 18:43:28</span>
-        <span class="mobile">2020-04-04 18:43</span>
+        <span class="pc">2023-05-10 17:02:28</span>
+        <span class="mobile">2023-05-10 17:02</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2020-04-04 18:43:28</span>
+        <span class="pc">2023-05-10 17:02:30</span>
     </span>
     
     
@@ -224,7 +224,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/C/">C#</a>&nbsp;
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
                     </li>
                 
             </ul>
@@ -236,7 +236,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/debug/">debug</a>&nbsp;
+                        <a href="/tags/linux/">linux</a>&nbsp;
                     </li>
                 
             </ul>
@@ -246,12 +246,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>596 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>174 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
         </span>
     
     
@@ -265,59 +265,24 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="表达式树"><a href="#表达式树" class="headerlink" title="表达式树"></a>表达式树</h1><p>表达式树以树形数据结构表示代码，其中每一个节点都是一种表达式，逻辑以表达式的方式存储在树状结构里，从而可以在运行时去解析这个树，然后执行，实现动态的编辑和执行代码，在不同数据库中执行 LINQ 查询以及创建动态查询。</p>
+                <p>对于采用systemd管理服务的系统下，默认存在<code>systemd-journald</code>日志服务，并提供了<code>journalctl</code>命令查询记录的日志信息。</p>
 <span id="more"></span>
-<p>1.使用lambda表达式创建表达式树</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; expr = num =&gt; num * <span class="number">2</span>;</span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt; result = expr.Compile();</span><br><span class="line">Console.Write(result(<span class="number">5</span>));</span><br></pre></td></tr></table></figure>
-<p>打印输出：</p>
-<blockquote>
-<p>10</p>
-</blockquote>
-<p><em>以上表达式树编译后，返回一个带输入输出参数的委托对象。</em></p>
-<p>2.使用LINQ查询数据时，传递错误的表达式参数导致数据库全表查询。<br>这里只演示LINQ查询时的核心部分代码。</p>
-<ul>
-<li><p>错误使用：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Func&lt;UserInfo, <span class="built_in">bool</span>&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
-<p>SQL</p>
-<blockquote>
-<p>SELECT Id, Name… FROM UserInfo</p>
-</blockquote>
-<p>  <em>以上式例中传递的查询条件并非表示式树，而是一个委托对象。虽然编译时编译器并不会报错，但在实际查询时，监控SQL查询语句你会发现<strong>查询条件并没有包含在SQL语句中</strong>，这样就会导致每次查询时会全表查询，把所有数据加载到内存中，然后使用委托过滤掉。虽然业务实现了，但在大量并发请求时导致的内存消耗无疑是一场灾难。</em></p>
-</li>
-<li><p>正确使用：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;UserInfo, <span class="built_in">bool</span>&gt;&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
-<p>SQL</p>
-<blockquote>
-<p>SELECT Id, Name… FROM UserInfo WHERE Id &#x3D; 1 AND IsDelete &#x3D; 0</p>
-</blockquote>
-</li>
+
+<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><ul>
+<li>查询所有日志：<code>journalctl</code></li>
+<li>查询内核日志：<code>journalctl -k</code></li>
+<li>查询启动日志：<code>journalctl -b</code></li>
+<li>查询最近20条日志：<code>journalctl -n 20</code></li>
+<li>查询并跟踪日志：<code>journalctl -f</code></li>
+<li>查询冲突、告警、错误日志：<code>journalctl -p err..alert</code></li>
+<li>查询制定服务日志：<code>journalctl -u caddy.service -u nginx.service</code></li>
+<li>查询指定进程日志：<code>journalctl _PID=725</code></li>
 </ul>
-<h1 id="Uri-EscapeDataString"><a href="#Uri-EscapeDataString" class="headerlink" title="Uri.EscapeDataString"></a>Uri.EscapeDataString</h1><blockquote>
-<p><em>.Net HttpClient Invalid URI: The Uri string is too long</em></p>
-</blockquote>
-<p>在使用HttpClient通过Post发送大量数据请求时，报错“无效的URI：Uri字符串太长”，由于转义字符串超过最大长度限制。<br>不同版本（.NET）限制长度：</p>
-<table>
-<thead>
-<tr>
-<th align="left">版本</th>
-<th align="left">限制长度</th>
-<th align="left">有效长度</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">&lt; 4.5</td>
-<td align="left">32766</td>
-<td align="left">32765</td>
-</tr>
-<tr>
-<td align="left">&gt;&#x3D; 4.5</td>
-<td align="left">65520</td>
-<td align="left">65519</td>
-</tr>
-</tbody></table>
-<p>解决方案：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">EncodeString</span>(<span class="params"><span class="built_in">string</span> content</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// maxLengthAllowed .NET &lt; 4.5 = 32765;</span></span><br><span class="line">    <span class="comment">// maxLengthAllowed .NET &gt;= 4.5 = 65519;</span></span><br><span class="line">    <span class="built_in">int</span> maxLengthAllowed = <span class="number">65519</span>;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="built_in">int</span> loops = content.Length / maxLengthAllowed;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt;= loops; i++)&#123;</span><br><span class="line">		sb.Append(Uri.EscapeDataString(i &lt; loops </span><br><span class="line">		? content.Substring(i * maxLengthAllowed, maxLengthAllowed)</span><br><span class="line">		: content.Substring(i * maxLengthAllowed)</span><br><span class="line">		));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> sb.ToString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><em>使用Post发送对象数据时，content格式为“key&#x3D;value&amp;key1&#x3D;value1&amp;….”</em></p>
+<h4 id="根据时间查询命令"><a href="#根据时间查询命令" class="headerlink" title="根据时间查询命令"></a>根据时间查询命令</h4><ul>
+<li>查询20分钟前的日志：<code>journalctl --since &quot;20 min ago&quot;</code></li>
+<li>查询今天的日志：<code>journalctl --since today</code></li>
+<li>查询指定日期的日志：<code>journalctl --until 2023-05-01</code></li>
+</ul>
 
             </div>
 
@@ -327,16 +292,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">开发中踩过的那些坑...</span>
+            <span class="type">本文标题</span>：<span class="content">Linux日志查询命令journalctl使用手册</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2020-04-04 18:43:28</span>
+            <span class="type">创建时间</span>：<span class="content">2023-05-10 17:02:28</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2020/04/04/works-bug/</span>
+            <span class="type">本文链接</span>：<span class="content">2023/05/10/linux-journalctl/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -354,7 +319,7 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/debug/">#debug</a>&nbsp;
+                            <a href="/tags/linux/">#linux</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -363,21 +328,21 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2020/04/05/readme/"
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/05/10/centos-dnf-makecache/"
                             >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">解决centos dnf自动更新异常问题</span>
+                                <span class="post-nav-item">下一篇</span>
                             </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">This Blog README</span>
-                                <span class="post-nav-item">上一篇</span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
                             </span>
                             </a>
                         </div>
-                    
                     
                 </div>
             
@@ -448,7 +413,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">表达式树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Uri-EscapeDataString"><span class="nav-number">2.</span> <span class="nav-text">Uri.EscapeDataString</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E6%97%B6%E9%97%B4%E6%9F%A5%E8%AF%A2%E5%91%BD%E4%BB%A4"><span class="nav-number">2.</span> <span class="nav-text">根据时间查询命令</span></a></li></ol>
     </div>
 </div>
 

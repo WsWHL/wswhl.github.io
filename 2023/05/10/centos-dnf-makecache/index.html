@@ -9,7 +9,7 @@
     
     <title>
         
-            开发中踩过的那些坑... |
+            解决centos dnf自动更新异常问题 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">开发中踩过的那些坑...</span>
+                <span class="title-hover-animation">解决centos dnf自动更新异常问题</span>
             </div>
 
             
@@ -209,13 +209,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2020-04-04 18:43:28</span>
-        <span class="mobile">2020-04-04 18:43</span>
+        <span class="pc">2023-05-10 16:09:38</span>
+        <span class="mobile">2023-05-10 16:09</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2020-04-04 18:43:28</span>
+        <span class="pc">2023-05-10 16:09:41</span>
     </span>
     
     
@@ -224,7 +224,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/C/">C#</a>&nbsp;
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
                     </li>
                 
             </ul>
@@ -236,7 +236,7 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/debug/">debug</a>&nbsp;
+                        <a href="/tags/linux/">linux</a>&nbsp;
                     </li>
                 
             </ul>
@@ -246,12 +246,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>596 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>228 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
         </span>
     
     
@@ -265,60 +265,18 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="表达式树"><a href="#表达式树" class="headerlink" title="表达式树"></a>表达式树</h1><p>表达式树以树形数据结构表示代码，其中每一个节点都是一种表达式，逻辑以表达式的方式存储在树状结构里，从而可以在运行时去解析这个树，然后执行，实现动态的编辑和执行代码，在不同数据库中执行 LINQ 查询以及创建动态查询。</p>
+                <h4 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h4><p>最近发现代理服务总是出现莫名中断不可访问的异常问题，刚开始怀疑是机器搭建的服务太多导致内存占用过高导致的，于是用top命令查了一下占用最多的服务也就200Mb，总共占用也就百分之六七十，不应该导致服务崩溃，于是又查询了一下系统日志才发现端倪.</p>
 <span id="more"></span>
-<p>1.使用lambda表达式创建表达式树</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; expr = num =&gt; num * <span class="number">2</span>;</span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt; result = expr.Compile();</span><br><span class="line">Console.Write(result(<span class="number">5</span>));</span><br></pre></td></tr></table></figure>
-<p>打印输出：</p>
-<blockquote>
-<p>10</p>
-</blockquote>
-<p><em>以上表达式树编译后，返回一个带输入输出参数的委托对象。</em></p>
-<p>2.使用LINQ查询数据时，传递错误的表达式参数导致数据库全表查询。<br>这里只演示LINQ查询时的核心部分代码。</p>
-<ul>
-<li><p>错误使用：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Func&lt;UserInfo, <span class="built_in">bool</span>&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
-<p>SQL</p>
-<blockquote>
-<p>SELECT Id, Name… FROM UserInfo</p>
-</blockquote>
-<p>  <em>以上式例中传递的查询条件并非表示式树，而是一个委托对象。虽然编译时编译器并不会报错，但在实际查询时，监控SQL查询语句你会发现<strong>查询条件并没有包含在SQL语句中</strong>，这样就会导致每次查询时会全表查询，把所有数据加载到内存中，然后使用委托过滤掉。虽然业务实现了，但在大量并发请求时导致的内存消耗无疑是一场灾难。</em></p>
-</li>
-<li><p>正确使用：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;UserInfo, <span class="built_in">bool</span>&gt;&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
-<p>SQL</p>
-<blockquote>
-<p>SELECT Id, Name… FROM UserInfo WHERE Id &#x3D; 1 AND IsDelete &#x3D; 0</p>
-</blockquote>
-</li>
-</ul>
-<h1 id="Uri-EscapeDataString"><a href="#Uri-EscapeDataString" class="headerlink" title="Uri.EscapeDataString"></a>Uri.EscapeDataString</h1><blockquote>
-<p><em>.Net HttpClient Invalid URI: The Uri string is too long</em></p>
-</blockquote>
-<p>在使用HttpClient通过Post发送大量数据请求时，报错“无效的URI：Uri字符串太长”，由于转义字符串超过最大长度限制。<br>不同版本（.NET）限制长度：</p>
-<table>
-<thead>
-<tr>
-<th align="left">版本</th>
-<th align="left">限制长度</th>
-<th align="left">有效长度</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">&lt; 4.5</td>
-<td align="left">32766</td>
-<td align="left">32765</td>
-</tr>
-<tr>
-<td align="left">&gt;&#x3D; 4.5</td>
-<td align="left">65520</td>
-<td align="left">65519</td>
-</tr>
-</tbody></table>
-<p>解决方案：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">EncodeString</span>(<span class="params"><span class="built_in">string</span> content</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// maxLengthAllowed .NET &lt; 4.5 = 32765;</span></span><br><span class="line">    <span class="comment">// maxLengthAllowed .NET &gt;= 4.5 = 65519;</span></span><br><span class="line">    <span class="built_in">int</span> maxLengthAllowed = <span class="number">65519</span>;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="built_in">int</span> loops = content.Length / maxLengthAllowed;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt;= loops; i++)&#123;</span><br><span class="line">		sb.Append(Uri.EscapeDataString(i &lt; loops </span><br><span class="line">		? content.Substring(i * maxLengthAllowed, maxLengthAllowed)</span><br><span class="line">		: content.Substring(i * maxLengthAllowed)</span><br><span class="line">		));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> sb.ToString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><em>使用Post发送对象数据时，content格式为“key&#x3D;value&amp;key1&#x3D;value1&amp;….”</em></p>
 
+<h4 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h4><p>查询系统错误和警告日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -p err..alert</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>kernel: Out of memory: Killed process 1813 (dnf) total-vm:842700kB, anon-rss:259464kB, file-rss:0kB, shmem-rss:0kB, UID:0 pgtables:1236kB oom_score_adj:0<br>systemd[1]: Failed to start dnf makecache.</p>
+</blockquote>
+<p><em>原来是由于dnf软件包信息更新导致的系统OOM崩溃.</em></p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>由于主机内存有限（1G）, 于是只能选择先禁用，优先保证服务正常运转.</p>
+<p>禁用定时服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop dnf-makecache.timer</span><br><span class="line">systemctl disable dnf-makecache.timer</span><br></pre></td></tr></table></figure>
             </div>
 
             
@@ -327,16 +285,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">开发中踩过的那些坑...</span>
+            <span class="type">本文标题</span>：<span class="content">解决centos dnf自动更新异常问题</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2020-04-04 18:43:28</span>
+            <span class="type">创建时间</span>：<span class="content">2023-05-10 16:09:38</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2020/04/04/works-bug/</span>
+            <span class="type">本文链接</span>：<span class="content">2023/05/10/centos-dnf-makecache/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -354,7 +312,7 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/debug/">#debug</a>&nbsp;
+                            <a href="/tags/linux/">#linux</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -366,18 +324,33 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2020/04/05/readme/"
+                               href="/2023/05/10/linux-journalctl/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">This Blog README</span>
+                                <span class="post-nav-title-item">Linux日志查询命令journalctl使用手册</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
                         </div>
                     
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/05/07/hexon-deploy/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">hexo博客在线编辑同步服务hexon部署</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
                     
                 </div>
             
@@ -448,7 +421,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">表达式树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Uri-EscapeDataString"><span class="nav-number">2.</span> <span class="nav-text">Uri.EscapeDataString</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="nav-number">2.</span> <span class="nav-text">问题排查</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">解决方案</span></a></li></ol>
     </div>
 </div>
 
