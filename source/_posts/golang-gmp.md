@@ -38,3 +38,49 @@ Go 语言并发模型中的 M 是操作系统线程。调度器最多可以创�
 4. 处理器P本地队列的任务G调度完了以后，就会去全局队列获取待执行的任务G，如果全局队列空了，就会去其他处理器P中偷待执行的任务G。
 5. 如果某个G处于阻塞状态，线程M就会去获取其他任务G执行调度。
 6. 如果G进行了系统调用syscall，M也会跟着进入系统调用状态，处理器P不会处于等待状态，而是会去找其他比较闲的M执行其他任务G。
+
+### 举个例子
+
+```go
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"sync"
+)
+
+func main() {
+	runtime.GOMAXPROCS(1)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(3)
+
+	go func(i int) {
+		fmt.Println(i)
+		wg.Done()
+	}(1)
+
+	go func(i int) {
+		fmt.Println(i)
+		wg.Done()
+	}(2)
+
+	go func(i int) {
+		fmt.Println(i)
+		wg.Done()
+	}(3)
+
+	wg.Wait()
+}
+```
+
+打印输出如下：
+> 3
+> 1
+> 2
+
+
+原理：
+
+此处只有一个线程M和对应一个处理器P，每个处理器P有个待执行的runnext，表示接下来调度的G，创建G时会优先给到runnext，如果继续添加G就会将原来的G挤走到P的本地队列runq（最多256个）中，依此类推2把1挤走，3把2挤走，最后runnext为3，3调度完了从本地队列获取1执行，1执行完了获取2执行，所以得到如上输出结果。.
