@@ -9,7 +9,7 @@
     
     <title>
         
-            Trojan服务部署 |
+            ClasshX协议配置 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">Trojan服务部署</span>
+                <span class="title-hover-animation">ClasshX协议配置</span>
             </div>
 
             
@@ -209,48 +209,22 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2020-04-05 14:46:56</span>
-        <span class="mobile">2020-04-05 14:46</span>
+        <span class="pc">2024-02-20 21:28:37</span>
+        <span class="mobile">2024-02-20 21:28</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2020-04-05 14:46:56</span>
+        <span class="pc">2024-02-20 21:28:37</span>
     </span>
     
     
-        <span class="article-categories article-meta-item">
-            <i class="fas fa-folder"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/categories/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/">科学上网</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
-    
-    
-        <span class="article-tags article-meta-item">
-            <i class="fas fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/Trojan/">Trojan</a>&nbsp;
-                    </li>
-                
-                    <li>
-                        | <a href="/tags/Proxy/">Proxy</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>302 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>62 字</span>
         </span>
     
     
@@ -269,28 +243,7 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="trojan-gfw"><a href="#trojan-gfw" class="headerlink" title="trojan-gfw"></a>trojan-gfw</h1><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/trojan-gfw/trojan" >trojan-gfw<i class="fas fa-external-link-alt"></i></a></p>
-<span id="more"></span>
-<ul>
-<li><p>config</p>
-  <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;run_type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;server&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;local_addr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;local_port&quot;</span><span class="punctuation">:</span> <span class="number">443</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;remote_addr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;trojan-nginx&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;remote_port&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">		<span class="string">&quot;mypassword&quot;</span></span><br><span class="line">	<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;log_level&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;ssl&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;cert&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/cers/tls.crt&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/cers/tls.key&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;key_password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;cipher&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ECDHE-ECDSA-AES128-GCM-SHA256****&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;cipher_tls13&quot;</span><span class="punctuation">:</span> <span class="string">&quot;TLS_AES_128_GCM_SHA256***&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;prefer_server_cipher&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;alpn&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">			<span class="string">&quot;http/1.1&quot;</span></span><br><span class="line">		<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;reuse_session&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;session_ticket&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;session_timeout&quot;</span><span class="punctuation">:</span> <span class="number">600</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;plain_http_response&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;curves&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;dhparam&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;tcp&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;prefer_ipv4&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;no_delay&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;keep_alive&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;reuse_port&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;fast_open&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;fast_open_qlen&quot;</span><span class="punctuation">:</span> <span class="number">20</span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;mysql&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;server_addr&quot;</span><span class="punctuation">:</span> <span class="string">&quot;trojan_db&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;server_port&quot;</span><span class="punctuation">:</span> <span class="number">3306</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;database&quot;</span><span class="punctuation">:</span> <span class="string">&quot;trojan&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;trojan&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;123456&quot;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>** 将tls证书放置<code>/cers/</code>目录*</p>
-<h1 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h1><ul>
-<li><p>安装nginx软件包<br><code>yum install nginx -y</code></p>
-</li>
-<li><p>启动nginx服务</p>
-  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable nginx</span><br><span class="line">systemctl start nginx</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h1 id="trojan-service"><a href="#trojan-service" class="headerlink" title="trojan service"></a>trojan service</h1><p>创建服务配置文件<br><code>vim /etc/systemd/system/trojan.service</code></p>
-<ul>
-<li><p>服务配置</p>
-  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=trojan</span><br><span class="line">Documentation=man:trojan(1) https://trojan-gfw.github.io/trojan/config https://trojan-gfw.github.io/trojan/</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">StandardError=journal</span><br><span class="line">User=nobody</span><br><span class="line">AmbientCapabilities=CAP_NET_BIND_SERVICE</span><br><span class="line">ExecStart=/usr/bin/trojan -c /etc/trojan/config.json</span><br><span class="line">ExecReload=/bin/kill -HUP $MAINPID</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=3s</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>服务启动命令</p>
-  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable trojan</span><br><span class="line">systemctl start trojan</span><br></pre></td></tr></table></figure></li>
-</ul>
-
+                <h3 id="VLESS"><a href="#VLESS" class="headerlink" title="VLESS"></a>VLESS</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">&lt;名称&gt;</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">vless</span></span><br><span class="line">  <span class="attr">server:</span> <span class="string">&lt;服务地址&gt;</span></span><br><span class="line">  <span class="attr">port:</span> <span class="string">&lt;服务端口&gt;</span></span><br><span class="line">  <span class="attr">uuid:</span> <span class="string">&lt;标识ID&gt;</span></span><br><span class="line">  <span class="attr">alterId:</span> <span class="number">64</span></span><br><span class="line">  <span class="attr">cipher:</span> <span class="string">auto</span></span><br><span class="line">  <span class="attr">udp:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">network:</span> <span class="string">ws</span></span><br><span class="line">  <span class="attr">sni:</span> <span class="string">&lt;服务地址&gt;</span></span><br><span class="line">  <span class="attr">tls:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">ws-opts:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/&lt;回退路径&gt;</span></span><br><span class="line">    <span class="attr">headers:</span></span><br><span class="line">      <span class="attr">Host:</span> <span class="string">&lt;服务地址&gt;</span></span><br></pre></td></tr></table></figure>
             </div>
 
             
@@ -299,16 +252,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">Trojan服务部署</span>
+            <span class="type">本文标题</span>：<span class="content">ClasshX协议配置</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2020-04-05 14:46:56</span>
+            <span class="type">创建时间</span>：<span class="content">2024-02-20 21:28:37</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2020/04/05/trojan-server/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/02/20/classhx-protocol/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -323,45 +276,18 @@
             
 
             
-                <ul class="post-tags-box">
-                    
-                        <li class="tag-item">
-                            <a href="/tags/Trojan/">#Trojan</a>&nbsp;
-                        </li>
-                    
-                        <li class="tag-item">
-                            <a href="/tags/Proxy/">#Proxy</a>&nbsp;
-                        </li>
-                    
-                </ul>
-            
 
             
                 <div class="article-nav">
-                    
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2020/04/05/es-parent-child/"
-                            >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">Elasticsearch parent child索引构建</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                            </a>
-                        </div>
                     
                     
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2020/04/05/rbmq-delayed-msg/"
+                               href="/2023/11/06/computer-principle/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">RabbitMQ Delayed Message</span>
+                                <span class="post-nav-title-item">计算机组成原理</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -439,7 +365,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#trojan-gfw"><span class="nav-number">1.</span> <span class="nav-text">trojan-gfw</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nginx"><span class="nav-number">2.</span> <span class="nav-text">nginx</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#trojan-service"><span class="nav-number">3.</span> <span class="nav-text">trojan service</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#VLESS"><span class="nav-number">1.</span> <span class="nav-text">VLESS</span></a></li></ol>
     </div>
 </div>
 
