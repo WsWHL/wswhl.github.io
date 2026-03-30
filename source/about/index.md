@@ -15,4 +15,4 @@ updated: '2023-05-08 16:01:51'
 愿岁月温柔以待...
 
 😌如果觉得内容不错，记得打赏支持一下博主撒!
-<img src="/images/wechat-donate.jpg" width="174" height="152" alt="☕️请他喝咖啡！" title="打赏">
+<img src="https://github.com/WsWHL/picx-images-hosting/raw/master/image.5tqr6m7c7u.webp" width="174" height="152" alt="☕️请他喝咖啡！" title="打赏">
