@@ -9,7 +9,7 @@
     
     <title>
         
-            开发中踩过的那些坑... |
+            GMP调取器模型设计 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">开发中踩过的那些坑...</span>
+                <span class="title-hover-animation">GMP调取器模型设计</span>
             </div>
 
             
@@ -209,13 +209,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2020-04-04 18:43:28</span>
-        <span class="mobile">2020-04-04 18:43</span>
+        <span class="pc">2024-02-20 21:33:55</span>
+        <span class="mobile">2024-02-20 21:33</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2020-04-04 18:43:28</span>
+        <span class="pc">2024-02-20 21:33:58</span>
     </span>
     
     
@@ -224,7 +224,7 @@
             <ul>
                 
                     <li>
-                        <a href="/categories/C/">C#</a>&nbsp;
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
                     </li>
                 
             </ul>
@@ -236,7 +236,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/debug/">debug</a>&nbsp;
+                        <a href="/tags/Blog/">Blog</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/go/">go</a>&nbsp;
                     </li>
                 
             </ul>
@@ -246,12 +250,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>596 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>1k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -265,59 +269,34 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <h1 id="表达式树"><a href="#表达式树" class="headerlink" title="表达式树"></a>表达式树</h1><p>表达式树以树形数据结构表示代码，其中每一个节点都是一种表达式，逻辑以表达式的方式存储在树状结构里，从而可以在运行时去解析这个树，然后执行，实现动态的编辑和执行代码，在不同数据库中执行 LINQ 查询以及创建动态查询。</p>
-<span id="more"></span>
-<p>1.使用lambda表达式创建表达式树</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt;&gt; expr = num =&gt; num * <span class="number">2</span>;</span><br><span class="line">Func&lt;<span class="built_in">int</span>, <span class="built_in">int</span>&gt; result = expr.Compile();</span><br><span class="line">Console.Write(result(<span class="number">5</span>));</span><br></pre></td></tr></table></figure>
-<p>打印输出：</p>
-<blockquote>
-<p>10</p>
-</blockquote>
-<p><em>以上表达式树编译后，返回一个带输入输出参数的委托对象。</em></p>
-<p>2.使用LINQ查询数据时，传递错误的表达式参数导致数据库全表查询。<br>这里只演示LINQ查询时的核心部分代码。</p>
+                <p>GPM代表了三个角色，分别是Goroutine、Processor、Machine。</p>
 <ul>
-<li><p>错误使用：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Func&lt;UserInfo, <span class="built_in">bool</span>&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
-<p>SQL</p>
-<blockquote>
-<p>SELECT Id, Name… FROM UserInfo</p>
-</blockquote>
-<p>  <em>以上式例中传递的查询条件并非表示式树，而是一个委托对象。虽然编译时编译器并不会报错，但在实际查询时，监控SQL查询语句你会发现<strong>查询条件并没有包含在SQL语句中</strong>，这样就会导致每次查询时会全表查询，把所有数据加载到内存中，然后使用委托过滤掉。虽然业务实现了，但在大量并发请求时导致的内存消耗无疑是一场灾难。</em></p>
-</li>
-<li><p>正确使用：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Expression&lt;Func&lt;UserInfo, <span class="built_in">bool</span>&gt;&gt; filter = u =&gt; u.Id == <span class="number">1</span> &amp;&amp; u.IsDelete == <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">var</span> users = dbContext.UserInfos.Where(filter).ToList();</span><br></pre></td></tr></table></figure>
-<p>SQL</p>
-<blockquote>
-<p>SELECT Id, Name… FROM UserInfo WHERE Id &#x3D; 1 AND IsDelete &#x3D; 0</p>
-</blockquote>
-</li>
+<li>G — 就是咱们常用的用go关键字创建的执行体，它对应一个结构体g，结构体里保存了goroutine的堆栈信息</li>
+<li>M — 表示操作系统的线程，它由操作系统的调度器调度和管理</li>
+<li>P — 表示处理器，它可以被看做运行在线程上的本地调度器</li>
 </ul>
-<h1 id="Uri-EscapeDataString"><a href="#Uri-EscapeDataString" class="headerlink" title="Uri.EscapeDataString"></a>Uri.EscapeDataString</h1><blockquote>
-<p><em>.Net HttpClient Invalid URI: The Uri string is too long</em></p>
+<h3 id="G"><a href="#G" class="headerlink" title="G"></a>G</h3><p>Goroutine 是 Go 语言调度器中待执行的任务，它在运行时调度器中的地位与线程在操作系统中差不多，但是它占用了更小的内存空间，也降低了上下文切换的开销。</p>
+<p>Goroutine 只存在于 Go 语言的运行时，它是 Go 语言在用户态提供的线程，作为一种粒度更细的资源调度单元，如果使用得当能够在高并发的场景下更高效地利用机器的 CPU。</p>
+<h3 id="M"><a href="#M" class="headerlink" title="M"></a>M</h3><p>Go 语言并发模型中的 M 是操作系统线程。调度器最多可以创建 10000 个线程，但是其中大多数的线程都不会执行用户代码（可能陷入系统调用），最多只会有 GOMAXPROCS 个活跃线程能够正常运行。</p>
+<p>默认情况下GOMAXPROCS被设置为内核数，假如有四个内核，那么默认就创建四个线程，每一个线程对应一个runtime.m结构体。线程数等于CPU个数的原因是，每个线程分配到一个CPU上就不至于出现线程的上下文切换，可以保证系统开销降到最低。</p>
+<h3 id="P"><a href="#P" class="headerlink" title="P"></a>P</h3><p>调度器中的处理器 P 是线程和 Goroutine 的中间层，它能提供线程需要的上下文环境，也会负责调度线程上的等待队列，通过处理器 P 的调度，每一个内核线程都能够执行多个 Goroutine，它能在 Goroutine 进行一些 I&#x2F;O 操作时及时让出计算资源，提高线程的利用率。</p>
+<p>因为调度器在启动时就会创建 GOMAXPROCS 个处理器，所以 Go 语言程序的处理器数量一定会等于 GOMAXPROCS，这些处理器会绑定到不同的内核线程上。</p>
+<h3 id="调度流程"><a href="#调度流程" class="headerlink" title="调度流程"></a>调度流程</h3><ol>
+<li>P和M一对一关系，每个M关联一个P，M和P的数量与GOMAXPROCS的值一致。</li>
+<li>创建G时会优先交给P，每个P有个本地队列，最多可容纳256个G，当P本地队列塞满了就会将G放到全局对列中。</li>
+<li>线程M会从P本地队列获取G执行调度，每调度61次就会去全局队列获取G调度，防止全局队列中的G迟迟无法调度问题。</li>
+<li>处理器P本地队列的任务G调度完了以后，就会去全局队列获取待执行的任务G，如果全局队列空了，就会去其他处理器P中偷待执行的任务G。</li>
+<li>如果某个G处于阻塞状态，线程M就会去获取其他任务G执行调度。</li>
+<li>如果G进行了系统调用syscall，M也会跟着进入系统调用状态，处理器P不会处于等待状态，而是会去找其他比较闲的M执行其他任务G。</li>
+</ol>
+<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;runtime&quot;</span></span><br><span class="line">	<span class="string">&quot;sync&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	runtime.GOMAXPROCS(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	wg := &amp;sync.WaitGroup&#123;&#125;</span><br><span class="line">	wg.Add(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打印输出如下：</p>
+<blockquote>
+<p>3<br>1<br>2</p>
 </blockquote>
-<p>在使用HttpClient通过Post发送大量数据请求时，报错“无效的URI：Uri字符串太长”，由于转义字符串超过最大长度限制。<br>不同版本（.NET）限制长度：</p>
-<table>
-<thead>
-<tr>
-<th align="left">版本</th>
-<th align="left">限制长度</th>
-<th align="left">有效长度</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">&lt; 4.5</td>
-<td align="left">32766</td>
-<td align="left">32765</td>
-</tr>
-<tr>
-<td align="left">&gt;&#x3D; 4.5</td>
-<td align="left">65520</td>
-<td align="left">65519</td>
-</tr>
-</tbody></table>
-<p>解决方案：</p>
-<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">EncodeString</span>(<span class="params"><span class="built_in">string</span> content</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// maxLengthAllowed .NET &lt; 4.5 = 32765;</span></span><br><span class="line">    <span class="comment">// maxLengthAllowed .NET &gt;= 4.5 = 65519;</span></span><br><span class="line">    <span class="built_in">int</span> maxLengthAllowed = <span class="number">65519</span>;</span><br><span class="line">    StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	<span class="built_in">int</span> loops = content.Length / maxLengthAllowed;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt;= loops; i++)&#123;</span><br><span class="line">		sb.Append(Uri.EscapeDataString(i &lt; loops </span><br><span class="line">		? content.Substring(i * maxLengthAllowed, maxLengthAllowed)</span><br><span class="line">		: content.Substring(i * maxLengthAllowed)</span><br><span class="line">		));</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> sb.ToString();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><em>使用Post发送对象数据时，content格式为“key&#x3D;value&amp;key1&#x3D;value1&amp;….”</em></p>
+<p>原理：</p>
+<p>此处只有一个线程M和对应一个处理器P，每个处理器P有个待执行的runnext，表示接下来调度的G，创建G时会优先给到runnext，如果继续添加G就会将原来的G挤走到P的本地队列runq（最多256个）中，依此类推2把1挤走，3把2挤走，最后runnext为3，3调度完了从本地队列获取1执行，1执行完了获取2执行，所以得到如上输出结果。.</p>
 
             </div>
 
@@ -327,16 +306,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">开发中踩过的那些坑...</span>
+            <span class="type">本文标题</span>：<span class="content">GMP调取器模型设计</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2020-04-04 18:43:28</span>
+            <span class="type">创建时间</span>：<span class="content">2024-02-20 21:33:55</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2020/04/04/works-bug/</span>
+            <span class="type">本文链接</span>：<span class="content">2024/02/20/golang-gmp/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -354,7 +333,11 @@
                 <ul class="post-tags-box">
                     
                         <li class="tag-item">
-                            <a href="/tags/debug/">#debug</a>&nbsp;
+                            <a href="/tags/Blog/">#Blog</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/go/">#go</a>&nbsp;
                         </li>
                     
                 </ul>
@@ -363,21 +346,21 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2020/04/05/readme/"
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/11/06/computer-principle/"
                             >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">计算机组成原理</span>
+                                <span class="post-nav-item">下一篇</span>
                             </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">This Blog README</span>
-                                <span class="post-nav-item">上一篇</span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
                             </span>
                             </a>
                         </div>
-                    
                     
                 </div>
             
@@ -448,7 +431,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">表达式树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Uri-EscapeDataString"><span class="nav-number">2.</span> <span class="nav-text">Uri.EscapeDataString</span></a></li></ol>
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#G"><span class="nav-number">1.</span> <span class="nav-text">G</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#M"><span class="nav-number">2.</span> <span class="nav-text">M</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P"><span class="nav-number">3.</span> <span class="nav-text">P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="nav-number">4.</span> <span class="nav-text">调度流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BE%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="nav-number">5.</span> <span class="nav-text">举个例子</span></a></li></ol>
     </div>
 </div>
 

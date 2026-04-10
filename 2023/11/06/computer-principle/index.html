@@ -9,7 +9,7 @@
     
     <title>
         
-            分类: 算法 |
+            计算机组成原理 |
         
         This Blog
     </title>
@@ -106,7 +106,7 @@
                         </li>
                     
                         <li class="menu-item">
-                            <a class="active"
+                            <a class=""
                                href="/categories"
                             >
                                 分类
@@ -158,7 +158,7 @@
                 </li>
             
                 <li class="drawer-menu-item flex-center">
-                    <a class="active"
+                    <a class=""
                        href="/categories">分类</a>
                 </li>
             
@@ -183,42 +183,263 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="category-container">
-        <div class="category-name">
-            <i class="fas fa-folder"></i>&nbsp;算法
-        </div>
-        <div class="category-post-list">
-            
-<div class="archive-list-container">
-    
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2020</span>
-                <span class="archive-year-post-count">[1]</span>
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            <div class="article-title">
+                <span class="title-hover-animation">计算机组成原理</span>
             </div>
-            <ul class="article-list">
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/avatar.jpg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">WsWHL</span>
+                            
+                                <span class="author-label">Lv3</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
+        <span class="pc">2023-11-06 22:08:57</span>
+        <span class="mobile">2023-11-06 22:08</span>
+    </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2023-11-08 22:46:17</span>
+    </span>
+    
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
                 
-                    <li class="article-item">
-                        <a class="article-title"
-                           href="/2020/04/05/sorts/"
-                        >常用排序算法锦集</a>
-                        <span class="article-date">04-05</span>
+                    <li>
+                        <a href="/tags/Blog/">Blog</a>&nbsp;
                     </li>
                 
             </ul>
-        </section>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>371 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+        </span>
+    
     
 </div>
 
-        </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <h3 id="计算机硬件系统五大组成部件：存储器、运算器、控制器、输入设备、输出设备"><a href="#计算机硬件系统五大组成部件：存储器、运算器、控制器、输入设备、输出设备" class="headerlink" title="计算机硬件系统五大组成部件：存储器、运算器、控制器、输入设备、输出设备"></a>计算机硬件系统五大组成部件：存储器、运算器、控制器、输入设备、输出设备</h3><ol>
+<li><p>冯诺依曼计算机以“运算器”为中心，现代计算机以“存储器”为中心<br>指令由操作码和地址码组成<br>指令和数据用二进制表示</p>
+</li>
+<li><p>小数转二进制</p>
+<ul>
+<li>整数部分按二进制模二除法，倒着取余数</li>
+<li>小数部分乘以2取整，顺着排列</li>
+</ul>
+<p>比如：将小数11.375转为二进制<br>11&#x3D;1011B<br>0.375 x 2 &#x3D; 0.75, 取0<br>0.75 x 2 &#x3D; 1.5, 取1<br>0.5 x 2 &#x3D; 1, 取1<br>所以11.375二进制为：1011.011</p>
+</li>
+<li><p>进制之间转换</p>
+</li>
+<li><p>二进制规格化</p>
+</li>
+<li><p>二进制一位乘法</p>
+<ul>
+<li>初始部分积为0</li>
+<li>如果乘数最低位为1，则部分积&#x3D;部分积+被乘数，且右移一位；如果乘数最低位为0，则部分积&#x3D;部分积+0，且有移一位。</li>
+<li>移位次数等于乘数数值位数</li>
+<li>计算符号位（正正得正，负负得正，正负得负），组合符号位和数值位即为结果</li>
+</ul>
+</li>
+<li><p>二进制两位乘法</p>
+</li>
+<li><p>二进制除法加减交替法</p>
+<ul>
+<li>余数符号位为1, 上商为0, 下一步余数左移一位, 加除数</li>
+<li>余数符号位为0, 上商为1, 下一步余数左移一位, 减除数(等同于加上除数负数的补码)</li>
+</ul>
+</li>
+<li><p>二进制除法恢复余数法</p>
+</li>
+<li><p>二进制浮点数规格化</p>
+</li>
+</ol>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    
+<div class="article-copyright-info-container">
+    <ul class="copyright-info-content">
+        <li class="post-title">
+            <span class="type">本文标题</span>：<span class="content">计算机组成原理</span>
+        </li>
+        <li class="post-author">
+            <span class="type">本文作者</span>：<span class="content">WsWHL</span>
+        </li>
+        <li class="post-time">
+            <span class="type">创建时间</span>：<span class="content">2023-11-06 22:08:57</span>
+        </li>
+        <li class="post-link">
+            <span class="type">本文链接</span>：<span class="content">2023/11/06/computer-principle/</span>
+        </li>
+        <li class="post-license">
+            <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
+        </li>
+    </ul>
+    <div class="copy-copyright-info flex-center tooltip" data-content="复制版权信息" data-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
     </div>
-    <div class="category-paginator">
-        <div class="paginator">
-    
+</div>
 
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/Blog/">#Blog</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                        <div class="article-prev">
+                            <a class="prev"
+                               rel="prev"
+                               href="/2024/02/20/golang-gmp/"
+                            >
+                            <span class="left arrow-icon flex-center">
+                              <i class="fas fa-chevron-left"></i>
+                            </span>
+                                <span class="title flex-center">
+                                <span class="post-nav-title-item">GMP调取器模型设计</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                            </a>
+                        </div>
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2023/05/10/linux-journalctl/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Linux日志查询命令journalctl使用手册</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                <div class="comment-container">
+                    
+<div class="comments-container">
+    <div id="comments-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments"></i>&nbsp;评论
+    </div>
+    
+        
+            
+
+    <div class="gitalk-comment-container">
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+        <script data-pjax src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+        <script data-pjax>
+          function loadGitalk() {
+            let __gitalk__pathname = decodeURI(location.pathname);
+            const __gitalk__pathnameLength = __gitalk__pathname.length;
+            const __gitalk__pathnameMaxLength = 50;
+            if (__gitalk__pathnameLength > __gitalk__pathnameMaxLength) {
+              __gitalk__pathname = __gitalk__pathname.substring(0, __gitalk__pathnameMaxLength - 3) + '...';
+            }
+
+            try {
+              Gitalk && new Gitalk({
+                clientID: 'b3b5f07c8fe4c7f597ff',
+                clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+                repo: 'wswhl.github.io',
+                owner: 'WsWHL',
+                admin: 'WsWHL',
+                id: __gitalk__pathname,
+                proxy: 'https://cors.thisblog.cn/https://github.com/login/oauth/access_token',
+                language: 'zh-CN'
+              }).render('gitalk-container');
+            } catch (e) {
+              window.Gitalk = null;
+            }
+          }
+
+          if ('true' === 'true') {
+            const loadGitalkTimeout = setTimeout(() => {
+              loadGitalk();
+              clearTimeout(loadGitalkTimeout);
+            }, 1000);
+          } else {
+            window.addEventListener('DOMContentLoaded', loadGitalk);
+          }
+        </script>
+    </div>
+
+
+
+        
     
 </div>
 
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E7%B3%BB%E7%BB%9F%E4%BA%94%E5%A4%A7%E7%BB%84%E6%88%90%E9%83%A8%E4%BB%B6%EF%BC%9A%E5%AD%98%E5%82%A8%E5%99%A8%E3%80%81%E8%BF%90%E7%AE%97%E5%99%A8%E3%80%81%E6%8E%A7%E5%88%B6%E5%99%A8%E3%80%81%E8%BE%93%E5%85%A5%E8%AE%BE%E5%A4%87%E3%80%81%E8%BE%93%E5%87%BA%E8%AE%BE%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">计算机硬件系统五大组成部件：存储器、运算器、控制器、输入设备、输出设备</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
     </div>
 </div>
 
@@ -263,6 +484,28 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-bottom-side-tools">
@@ -362,6 +605,14 @@
 
 
 <div class="post-scripts pjax">
+    
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/post-helper.js"></script>
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/anime.min.js"></script>
+        
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/toc.js"></script>
+        
     
 </div>
 
