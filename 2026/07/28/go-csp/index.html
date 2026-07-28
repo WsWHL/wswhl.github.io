@@ -9,7 +9,7 @@
     
     <title>
         
-            标签: go |
+            Go并发模型 |
         
         This Blog
     </title>
@@ -98,7 +98,7 @@
                         </li>
                     
                         <li class="menu-item">
-                            <a class="active"
+                            <a class=""
                                href="/tags"
                             >
                                 标签
@@ -153,7 +153,7 @@
                 </li>
             
                 <li class="drawer-menu-item flex-center">
-                    <a class="active"
+                    <a class=""
                        href="/tags">标签</a>
                 </li>
             
@@ -183,59 +183,252 @@
 
                 
                     <div class="fade-in-down-animation">
-    <div class="tag-container">
-        <div class="tag-name"><i class="fas fa-tag"></i>&nbsp;go
-        </div>
-        <div class="tag-post-list">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            <div class="article-title">
+                <span class="title-hover-animation">Go并发模型</span>
+            </div>
+
             
-<div class="archive-list-container">
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/avatar.jpg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">WsWHL</span>
+                            
+                                <span class="author-label">Lv3</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
+        <span class="pc">2026-07-28 18:16:04</span>
+        <span class="mobile">2026-07-28 18:16</span>
+    </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2026</span>
-                <span class="archive-year-post-count">[1]</span>
-            </div>
-            <ul class="article-list">
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2026-07-28 18:16:07</span>
+    </span>
+    
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
                 
-                    <li class="article-item">
-                        <a class="article-title"
-                           href="/2026/07/28/go-csp/"
-                        >Go并发模型</a>
-                        <span class="article-date">07-28</span>
+                    <li>
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
                     </li>
                 
             </ul>
-        </section>
+        </span>
     
-        <section class="archive-item">
-            <div class="archive-item-header">
-                <span class="archive-year">2024</span>
-                <span class="archive-year-post-count">[1]</span>
-            </div>
-            <ul class="article-list">
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
                 
-                    <li class="article-item">
-                        <a class="article-title"
-                           href="/2024/02/20/golang-gmp/"
-                        >GMP调取器模型设计</a>
-                        <span class="article-date">02-20</span>
+                    <li>
+                        <a href="/tags/go/">go</a>&nbsp;
                     </li>
                 
             </ul>
-        </section>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>460 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>1 分钟</span>
+        </span>
+    
     
 </div>
 
-        </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <p>Go语言的Channel通信机制基于通信顺序进程 CSP（Communicating Sequential Processes） 并发模型。<br>它的核心哲学是：“不要通过共享内存来通信，而应该通过通信来共享内存”。</p>
+<p>Channel 是一种特殊的并发安全队列，遵循 FIFO（先进先出） 规则。它主要分为两种类型：</p>
+<ul>
+<li>无缓冲通道（Unbuffered Channel）：同步通信。发送方和接收方必须同时准备好，否则会阻塞。</li>
+<li>有缓冲通道（Buffered Channel）：异步通信。只要缓冲区未满，发送方就不会阻塞；只要缓冲区不空，接收方就不会阻塞。</li>
+</ul>
+<p>Channel 在底层是一个环形队列，其核心结构包含以下几个关键部分：</p>
+<ul>
+<li>qcount：当前通道中的元素个数。</li>
+<li>dataqsiz：环形队列的长度（缓冲区大小）。</li>
+<li>buf：指向底层环形队列的指针（仅对有缓冲通道有效）。</li>
+<li>sendq：Channel 的发送操作处理到的位置。</li>
+<li>recvq：Channel 的接收操作处理到的位置。</li>
+<li>lock：互斥锁，保障 Channel 并发操作的安全。</li>
+</ul>
+<p>Channel 支持发送（ch &lt;-）、接收（&lt;- ch）和关闭（close）操作，使用场景包括：</p>
+<ul>
+<li>数据传递：在不同的 Goroutine 间安全地传递数据。</li>
+<li>信号通知：利用 chan struct{}（空结构体不占用内存）作为信号管道，通知其他 Goroutine 退出或开始执行。</li>
+<li>超时控制：结合 select 语句和 time.After() 实现超时退出。</li>
+<li>广播机制：关闭 Channel 可以向所有接收方发送广播信号，所有等待该 Channel 的 Goroutine 将立即解除阻塞。</li>
+</ul>
+<p>接受数据：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">i &lt;- ch</span><br><span class="line">i, ok &lt;- ch</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可通过ok变量判断通道是否已关闭。</p>
+</blockquote>
+<p>关闭Channel：<br>当 Channel 是一个空指针或者已经被关闭时，执行关闭操作运行时都会直接崩溃并抛出异常。</p>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    
+<div class="article-copyright-info-container">
+    <ul class="copyright-info-content">
+        <li class="post-title">
+            <span class="type">本文标题</span>：<span class="content">Go并发模型</span>
+        </li>
+        <li class="post-author">
+            <span class="type">本文作者</span>：<span class="content">WsWHL</span>
+        </li>
+        <li class="post-time">
+            <span class="type">创建时间</span>：<span class="content">2026-07-28 18:16:04</span>
+        </li>
+        <li class="post-link">
+            <span class="type">本文链接</span>：<span class="content">2026/07/28/go-csp/</span>
+        </li>
+        <li class="post-license">
+            <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
+        </li>
+    </ul>
+    <div class="copy-copyright-info flex-center tooltip" data-content="复制版权信息" data-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/go/">#go</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2024/02/20/golang-gmp/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">GMP调取器模型设计</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                <div class="comment-container">
+                    
+<div class="comments-container">
+    <div id="comments-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments"></i>&nbsp;评论
+    </div>
+    
+        
+            
+
+    <div class="gitalk-comment-container">
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+        <script data-pjax src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+        <script data-pjax>
+          function loadGitalk() {
+            let __gitalk__pathname = decodeURI(location.pathname);
+            const __gitalk__pathnameLength = __gitalk__pathname.length;
+            const __gitalk__pathnameMaxLength = 50;
+            if (__gitalk__pathnameLength > __gitalk__pathnameMaxLength) {
+              __gitalk__pathname = __gitalk__pathname.substring(0, __gitalk__pathnameMaxLength - 3) + '...';
+            }
+
+            try {
+              Gitalk && new Gitalk({
+                clientID: 'b3b5f07c8fe4c7f597ff',
+                clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+                repo: 'wswhl.github.io',
+                owner: 'WsWHL',
+                admin: 'WsWHL',
+                id: __gitalk__pathname,
+                proxy: 'https://cors.thisblog.cn/https://github.com/login/oauth/access_token',
+                language: 'zh-CN'
+              }).render('gitalk-container');
+            } catch (e) {
+              window.Gitalk = null;
+            }
+          }
+
+          if ('true' === 'true') {
+            const loadGitalkTimeout = setTimeout(() => {
+              loadGitalk();
+              clearTimeout(loadGitalkTimeout);
+            }, 1000);
+          } else {
+            window.addEventListener('DOMContentLoaded', loadGitalk);
+          }
+        </script>
     </div>
 
-    <div class="tag-paginator">
-        <div class="paginator">
-    
 
+
+        
     
 </div>
 
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        
+    </div>
+</div>
+
+            </div>
+        
     </div>
 </div>
 
@@ -280,6 +473,28 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-bottom-side-tools">
@@ -379,6 +594,14 @@
 
 
 <div class="post-scripts pjax">
+    
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/post-helper.js"></script>
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/anime.min.js"></script>
+        
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/toc.js"></script>
+        
     
 </div>
 
