@@ -287,7 +287,7 @@
 <li>超时控制：结合 select 语句和 time.After() 实现超时退出。</li>
 <li>广播机制：关闭 Channel 可以向所有接收方发送广播信号，所有等待该 Channel 的 Goroutine 将立即解除阻塞。</li>
 </ul>
-<p>接受数据：</p>
+<p>接收数据：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">i &lt;- ch</span><br><span class="line">i, ok &lt;- ch</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>可通过ok变量判断通道是否已关闭。</p>
