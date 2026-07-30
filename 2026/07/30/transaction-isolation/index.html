@@ -9,7 +9,7 @@
     
     <title>
         
-            Redis服务 |
+            事务隔离级别 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">Redis服务</span>
+                <span class="title-hover-animation">事务隔离级别</span>
             </div>
 
             
@@ -209,13 +209,13 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2026-07-28 19:24:41</span>
-        <span class="mobile">2026-07-28 19:24</span>
+        <span class="pc">2026-07-30 13:43:38</span>
+        <span class="mobile">2026-07-30 13:43</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2026-07-28 19:24:44</span>
+        <span class="pc">2026-07-30 13:43:41</span>
     </span>
     
     
@@ -246,12 +246,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>1k 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>739 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
         </span>
     
     
@@ -265,41 +265,25 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <ol>
-<li>什么是Redis，Redis有哪些特点？<br>Redis全称为：Remote Dictionary Server（远程数据服务），Redis是一种支持key-value等多种数据结构的存储系统。可用于缓存，事件发布或订阅，高速队列等场景。支持网络，提供字符串，哈希，列表，队列，集合结构直接存取，基于内存，可持久化。</li>
-</ol>
+                <p>SQL 标准定义了四种事务隔离级别，用来平衡事务的隔离性（Isolation）和并发性能。级别越高，数据一致性越好，但并发性能可能越低。这四个级别是：</p>
 <ul>
-<li>丰富的数据类型</li>
-<li>内存存储：将所有的数据都存储在内存里面，数据读取和写入速度非常快</li>
-<li>持久化功能：将数据存储在内存里面的数据保存到硬盘中，保证数据安全，方便进行数据备份和恢复。</li>
+<li>Read Uncommitted（读未提交）：最低的隔离级别，允许读取尚未提交的数据变更，可能会导致脏读、幻读或不可重复读。这种级别在实际应用中很少使用，因为它对数据一致性的保证太弱。</li>
+<li>Read Committed（读已提交） ：允许读取并发事务已经提交的数据，可以阻止脏读，但是幻读或不可重复读仍有可能发生。这是大多数数据库（如 Oracle, SQL Server）的默认隔离级别。</li>
+<li>Repeatable Read（可重复读） ：对同一字段的多次读取结果都是一致的，除非数据是被本身事务自己所修改，可以阻止脏读和不可重复读，但幻读仍有可能发生。MySQL InnoDB 存储引擎的默认隔离级别正是 REPEATABLE READ。并且，InnoDB 在此级别下通过 MVCC（多版本并发控制） 和 Next-Key Locks（间隙锁+行锁） 机制，在很大程度上解决了幻读问题。</li>
+<li>Serializable（可串行化）：最高的隔离级别，完全服从 ACID 的隔离级别。所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。</li>
 </ul>
-<ol start="2">
-<li><p>Redis有哪些数据结构？</p>
+<p>事务的四个特性（ACID）：</p>
 <ul>
-<li>String：字符串<br> <code>SET KEY_NAME VALUE</code></li>
-<li>Hash：哈希表<br> <code>HSET KEY_NAME FIELD VALUE</code></li>
-<li>List：列表 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//在 key 对应 list 的头部添加字符串元素</span><br><span class="line">  LPUSH KEY_NAME VALUE1.. VALUEN</span><br><span class="line">  //在 key 对应 list 的尾部添加字符串元素</span><br><span class="line">  RPUSH KEY_NAME VALUE1..VALUEN</span><br><span class="line">  //对应 list 中删除 count 个和 value 相同的元素</span><br><span class="line">  LREM KEY_NAME COUNT VALUE</span><br><span class="line">  //返回 key 对应 list 的长度</span><br><span class="line">  LLEN KEY_NAME </span><br></pre></td></tr></table></figure></li>
-<li>Set：字典<br> <code>SADD KEY_NAME VALUE1...VALUEn</code></li>
-<li>Sorted Set：有序集合<br> <code>ZADD KEY_NAME SCORE1 VALUE1.. SCOREN VALUEN</code></li>
+<li>原子性（Atomicity）：一个事务（transaction）中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。</li>
+<li>一致性（Consistency）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设规则，这包含资料的精确度、串联性以及后续数据库可以自发性地完成预定的工作。</li>
+<li>隔离性（Isolation）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括读未提交（read uncommitted）、读提交（read committed）、可重复读（repeatable read）和串行化（Serializable），下面会详细说明。</li>
+<li>持久性（Durability）：事务处理结束后，对数据的修改就是永久的，会持久化到硬盘上，即便系统故障也不会丢失。</li>
 </ul>
-</li>
-<li><p>Redis如何做持久化的？及RDB和AOF的实现原理？</p>
-</li>
-</ol>
-<p>Redis是内存数据库，为了保证效率所有的操作都是在内存中完成。数据都是缓存在内存中，当你重启系统或者关闭系统，之前缓存在内存中的数据都会丢失再也不能找回。因此为了避免这种情况，Redis需要实现持久化将内存中的数据存储起来。</p>
-<p>Redis官方提供了不同级别的持久化方式：</p>
+<p>MySQL InnoDB 存储引擎的默认隔离级别是 REPEATABLE READ。可以通过以下命令查看：</p>
 <ul>
-<li>RDB持久化：能够在指定的时间间隔能对你的数据进行快照存储。</li>
-<li>AOF持久化：记录每次对服务器写的操作，当服务器重启的时候会重新执行这些命令来恢复原始的数据，AOF命令以redis协议追加保存每次写的操作到文件末尾。Redis还能对AOF文件进行后台重写，使得AOF文件的体积不至于过大。</li>
-<li>不使用持久化：如果你只希望你的数据在服务器运行的时候存在，你也可以选择不使用任何持久化方式。</li>
-<li>同时开启RDB和AOF：你也可以同时开启两种持久化方式，在这种情况下当redis重启的时候会优先载入AOF文件来恢复原始的数据，因为在通常情况下AOF文件保存的数据集要比RDB文件保存的数据集要完整。</li>
+<li>MySQL 8.0 之前：SELECT @@tx_isolation;</li>
+<li>MySQL 8.0 及之后：SELECT @@transaction_isolation;<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> @<span class="variable">@transaction</span>_isolation;</span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------+</span></span><br><span class="line"><span class="operator">|</span> @<span class="variable">@transaction</span>_isolation <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------+</span></span><br><span class="line"><span class="operator">|</span> REPEATABLE<span class="operator">-</span>READ         <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------------------------+</span></span><br></pre></td></tr></table></figure></li>
 </ul>
-<p>RDB持久化：<br>RDB(Redis Database)持久化是把当前内存数据生成快照保存到硬盘的过程，触发RDB持久化过程分为手动触发和自动触发。</p>
-<p>（1）手动触发<br>手动触发对应save命令，会阻塞当前Redis服务器，直到RDB过程完成为止，对于内存比较大的实例会造成长时间阻塞，线上环境不建议使用。<br>（2）自动触发<br>自动触发对应bgsave命令，Redis进程执行fork操作创建子进程，RDB持久化过程由子进程负责，完成后自动结束。阻塞只发生在fork阶段，一般时间很短。</p>
-<p>在redis.conf配置文件中可以配置：<br><code>save &lt;seconds&gt; &lt;changes&gt;</code><br> 如果想关闭自动触发，可以在save命令后面加一个空串，即：<br> <code>save &quot;&quot;</code></p>
-<p>AOF持久化：<br>AOF（append only file）持久化：以独立日志的方式记录每次写命令， 重启时再重新执行AOF文件中的命令达到恢复数据的目的。AOF的主要作用是解决了数据持久化的实时性，目前已经是Redis持久化的主流方式。<br>开启AOF功能需要配置：appendonly yes，默认不开启。</p>
-<p>AOF文件名 通过appendfilename配置设置，默认文件名是appendonly.aof。保存路径同 RDB持久化方式一致，通过dir配置指定。</p>
-<p>AOF的工作流程操作：<br>命令写入 （append）、文件同步（sync）、文件重写（rewrite）、重启加载 （load）。</p>
 
             </div>
 
@@ -309,16 +293,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">Redis服务</span>
+            <span class="type">本文标题</span>：<span class="content">事务隔离级别</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2026-07-28 19:24:41</span>
+            <span class="type">创建时间</span>：<span class="content">2026-07-30 13:43:38</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2026/07/28/redis-server/</span>
+            <span class="type">本文链接</span>：<span class="content">2026/07/30/transaction-isolation/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -345,29 +329,14 @@
             
                 <div class="article-nav">
                     
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2026/07/30/transaction-isolation/"
-                            >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">事务隔离级别</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                            </a>
-                        </div>
-                    
                     
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2026/07/28/go-csp/"
+                               href="/2026/07/28/redis-server/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">Go并发模型</span>
+                                <span class="post-nav-title-item">Redis服务</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
