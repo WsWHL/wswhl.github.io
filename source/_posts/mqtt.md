@@ -1,4 +1,10 @@
 title: MQTT协议
+date: '2026-08-11 11:26:21'
+updated: '2026-08-11 11:26:29'
+tags:
+  - Blog
+categories:
+  - 每日一记
 ---
 MQTT(Message Queuing Telemetry Transport)是一种轻量级的发布/订阅消息传输协议，专为受限设备和低带宽、高延迟或不可靠的网络设计。
 
