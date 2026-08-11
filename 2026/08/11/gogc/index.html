@@ -9,7 +9,7 @@
     
     <title>
         
-            MQTT协议 |
+            Go垃圾回收 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">MQTT协议</span>
+                <span class="title-hover-animation">Go垃圾回收</span>
             </div>
 
             
@@ -209,27 +209,49 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2026-08-11 11:17:53</span>
-        <span class="mobile">2026-08-11 11:17</span>
+        <span class="pc">2026-08-11 16:27:48</span>
+        <span class="mobile">2026-08-11 16:27</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2026-08-11 11:28:35</span>
+        <span class="pc">2026-08-11 16:27:51</span>
     </span>
     
     
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/go/">go</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>744 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>918 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -243,73 +265,59 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <p>MQTT(Message Queuing Telemetry Transport)是一种轻量级的发布&#x2F;订阅消息传输协议，专为受限设备和低带宽、高延迟或不可靠的网络设计。</p>
-<p>主要特点：</p>
+                <h2 id="1-常见垃圾回收算法对比"><a href="#1-常见垃圾回收算法对比" class="headerlink" title="1. 常见垃圾回收算法对比"></a>1. 常见垃圾回收算法对比</h2><p>垃圾回收（Garbage Collection, GC）是指对程序中不再使用的内存资源进行自动回收的操作。常见的 GC 算法包括：</p>
 <ul>
-<li>轻量级：协议头部仅2字节，最小化传输开销</li>
-<li>发布&#x2F;订阅模式：解耦消息发送者和接收者</li>
-<li>QoS机制：提供三种服务质量等级</li>
-<li>保留消息：新订阅者可以立即获取最新状态</li>
-<li>遗嘱消息：客户端异常断开时自动发布特定消息</li>
-<li>会话保持：支持持久会话和清除会话</li>
+<li><p><strong>引用计数（Reference Counting）</strong></p>
+<ul>
+<li><strong>原理</strong>：每个对象维护一个引用计数器，增加引用时 $+1$，引用失效时 $-1$，计数归零时直接回收。</li>
+<li><strong>优点</strong>：回收及时，不会出现内存耗尽或达到阈值才触发的情况。</li>
+<li><strong>缺点</strong>：无法解决循环引用问题，且频繁更新计数有性能开销。</li>
 </ul>
-<p>MQTT基于主题(Topic)的发布&#x2F;订阅模式：</p>
+</li>
+<li><p><strong>标记-清除（Mark-Sweep）</strong></p>
+<ul>
+<li><strong>原理</strong>：从根对象（GC Roots）开始遍历所有可达对象并标记“被引用”，遍历结束后对未标记的白色对象进行回收。</li>
+<li><strong>优点</strong>：能够有效解决循环引用问题。</li>
+<li><strong>缺点</strong>：需要 Stop The World（STW），短暂停顿所有用户协程&#x2F;线程。</li>
+</ul>
+</li>
+<li><p><strong>分代收集（Generational Collection）</strong></p>
+<ul>
+<li><strong>原理</strong>：根据对象的生命周期长短划分为新生代和老年代，不同代采用不同的回收算法和频率。</li>
+<li><strong>优点</strong>：针对不同生命周期的对象优化，整体回收性能优秀。</li>
+<li><strong>缺点</strong>：实现逻辑较为复杂。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-三色标记法（Three-color-Marking）"><a href="#2-三色标记法（Three-color-Marking）" class="headerlink" title="2. 三色标记法（Three-color Marking）"></a>2. 三色标记法（Three-color Marking）</h2><p>Go 语言采用了<strong>并发三色标记清除算法</strong>。算法将对象分为三种颜色：</p>
 <ol>
-<li>发布者(Publisher)将消息发送到特定主题</li>
-<li>代理(Broker)接收消息并转发给订阅该主题的客户端</li>
-<li>订阅者(Subscriber)接收其订阅主题的所有消息</li>
+<li><strong>白色</strong>：未被扫描到的对象（潜在的垃圾对象）。</li>
+<li><strong>灰色</strong>：已被扫描到，但其引用的其他对象尚未被完整扫描。</li>
+<li><strong>黑色</strong>：已被扫描到，且其引用的所有对象也都已被扫描（可达的安全对象）。</li>
 </ol>
-<blockquote>
-<p>这种模式实现了发布者和订阅者的完全解耦，双方无需知道对方的存在。</p>
-</blockquote>
-<p>MQTT提供三种QoS(Quality of Service)级别：</p>
-<p>QoS 0 (最多一次)：</p>
+<h3 id="标记过程："><a href="#标记过程：" class="headerlink" title="标记过程："></a>标记过程：</h3><ol>
+<li><strong>初始状态</strong>：所有对象归为<strong>白色</strong>。</li>
+<li><strong>根扫描</strong>：从根节点（如全局变量、栈上的变量）开始遍历，将直接可达的对象放入灰色集合。</li>
+<li><strong>对象追踪</strong>：遍历灰色集合，将灰色对象引用的对象标记为灰色，然后将该灰色对象自身转为<strong>黑色</strong>。</li>
+<li><strong>循环迭代</strong>：重复上述步骤，直到灰色集合中没有对象。</li>
+<li><strong>垃圾清理</strong>：此时剩下的<strong>白色对象</strong>即为不可达垃圾，进行统一回收。</li>
+</ol>
+<h2 id="3-STW-与写屏障（Write-Barrier）"><a href="#3-STW-与写屏障（Write-Barrier）" class="headerlink" title="3. STW 与写屏障（Write Barrier）"></a>3. STW 与写屏障（Write Barrier）</h2><h3 id="3-1-为什么需要-STW？"><a href="#3-1-为什么需要-STW？" class="headerlink" title="3.1 为什么需要 STW？"></a>3.1 为什么需要 STW？</h3><p>为了防止在 GC 扫描过程中，用户协程修改指针引用关系，导致 GC 误删正在被引用的存活对象。通过 <strong>Stop The World (STW)</strong> 暂时挂起所有正在运行的 Goroutine，可以保证引用数据的一致性。目前 Go 的 STW 优化已能控制在 <strong>1ms 以下</strong>。</p>
+<h3 id="3-2-对象丢失的两个必要条件"><a href="#3-2-对象丢失的两个必要条件" class="headerlink" title="3.2 对象丢失的两个必要条件"></a>3.2 对象丢失的两个必要条件</h3><p>若要完全消除或极大地缩短 STW，引入混合写屏障来解决并发标记期间的引用变更问题。对象被误回收必须<strong>同时满足</strong>以下条件：</p>
+<ol>
+<li>黑色对象新增了指向白色对象的引用。</li>
+<li>该白色对象没有其他灰色对象的直接&#x2F;间接引用，或者原有的灰色引用被删除了。</li>
+</ol>
+<h3 id="3-3-屏障技术实现"><a href="#3-3-屏障技术实现" class="headerlink" title="3.3 屏障技术实现"></a>3.3 屏障技术实现</h3><p>屏障技术通过破坏上述两个条件之一来保证三色不变性：</p>
 <ul>
-<li>消息发送后不等待确认，可能丢失</li>
-<li>最低开销，最高吞吐量</li>
-<li>适用场景：传感器数据等允许丢失的场景</li>
+<li><strong>Dijkstra 插入写屏障（强三色不变性）</strong><ul>
+<li><strong>规则</strong>：黑色节点不允许直接引用白色节点。当黑色节点新增白色节点的引用时，强制将该白色节点修改为灰色。</li>
 </ul>
-<p>QoS 1 (至少一次)：</p>
-<ul>
-<li>确保消息至少送达一次，但可能重复</li>
-<li>中等开销</li>
-<li>适用场景：计费、日志等不能丢但可以重复的场景</li>
+</li>
+<li><strong>Yuasa 删除写屏障（弱三色不变性）</strong><ul>
+<li><strong>规则</strong>：允许黑色节点引用白色节点，但前提是该白色节点仍有其他灰色节点的间接引用。当白色节点被删除引用时，悲观地将其置为灰色，防止误杀。</li>
 </ul>
-<p>QoS 2 (恰好一次)：</p>
-<ul>
-<li>确保消息只送达一次，不丢失不重复</li>
-<li>最高开销，最低吞吐量</li>
-<li>适用场景：金融交易、控制命令等关键业务</li>
-</ul>
-<p>保留消息是一种特殊的消息，当发布到某个主题时，Broker会保存该消息：</p>
-<ul>
-<li>任何新订阅该主题的客户端会立即收到最近的保留消息</li>
-<li>每个主题只能有一个保留消息</li>
-<li>发布空消息可以清除保留消息</li>
-</ul>
-<p>应用场景：</p>
-<ul>
-<li>设备状态报告</li>
-<li>配置信息发布</li>
-<li>系统公告</li>
-</ul>
-<p>遗嘱消息(Will Message)是客户端连接到Broker时预设的一条消息，当客户端异常断开连接时，Broker会自动发布该消息：</p>
-<ul>
-<li>在CONNECT报文中设置</li>
-<li>包含主题、消息内容、QoS级别和保留标志</li>
-<li>只在非正常断开时触发</li>
-</ul>
-<p>主要用途：</p>
-<ul>
-<li>通知其他客户端设备离线</li>
-<li>发布设备最后状态</li>
-<li>触发故障恢复机制</li>
-</ul>
-<p>MQTT使用心跳机制维持连接：</p>
-<ul>
-<li>保活时间(Keep Alive)：客户端在CONNECT报文中设置表示客户端在无消息交换时最长允许的时间间隔单位为秒，0表示禁用心跳机制</li>
-<li>心跳交换：如果在保活时间内没有消息交换，客户端必须发送PINGREQ服务器必须响应PINGRESP如果服务器在1.5倍保活时间内未收到任何消息，会断开连接</li>
-<li>连接断开处理：正常断开: 客户端发送DISCONNECT.  异常断开: 触发遗嘱消息机制</li>
+</li>
 </ul>
 
             </div>
@@ -320,16 +328,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">MQTT协议</span>
+            <span class="type">本文标题</span>：<span class="content">Go垃圾回收</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2026-08-11 11:17:53</span>
+            <span class="type">创建时间</span>：<span class="content">2026-08-11 16:27:48</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2026/08/11/mqtt/</span>
+            <span class="type">本文链接</span>：<span class="content">2026/08/11/gogc/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -344,6 +352,14 @@
             
 
             
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/go/">#go</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
 
             
                 <div class="article-nav">
@@ -351,13 +367,13 @@
                         <div class="article-prev">
                             <a class="prev"
                                rel="prev"
-                               href="/2026/08/11/gogc/"
+                               href="/2026/08/11/go-slice/"
                             >
                             <span class="left arrow-icon flex-center">
                               <i class="fas fa-chevron-left"></i>
                             </span>
                                 <span class="title flex-center">
-                                <span class="post-nav-title-item">Go垃圾回收</span>
+                                <span class="post-nav-title-item">Go切片</span>
                                 <span class="post-nav-item">上一篇</span>
                             </span>
                             </a>
@@ -367,10 +383,10 @@
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2026/07/30/transaction-isolation/"
+                               href="/2026/08/11/mqtt/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">事务隔离级别</span>
+                                <span class="post-nav-title-item">MQTT协议</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -448,7 +464,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%B8%B8%E8%A7%81%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="nav-number">1.</span> <span class="nav-text">1. 常见垃圾回收算法对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E6%B3%95%EF%BC%88Three-color-Marking%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">2. 三色标记法（Three-color Marking）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">标记过程：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-STW-%E4%B8%8E%E5%86%99%E5%B1%8F%E9%9A%9C%EF%BC%88Write-Barrier%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">3. STW 与写屏障（Write Barrier）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-STW%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 为什么需要 STW？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%AF%B9%E8%B1%A1%E4%B8%A2%E5%A4%B1%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 对象丢失的两个必要条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%B1%8F%E9%9A%9C%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 屏障技术实现</span></a></li></ol></li></ol>
     </div>
 </div>
 

@@ -9,7 +9,7 @@
     
     <title>
         
-            MQTT协议 |
+            mysql索引 |
         
         This Blog
     </title>
@@ -187,7 +187,7 @@
         <div class="article-content-container">
 
             <div class="article-title">
-                <span class="title-hover-animation">MQTT协议</span>
+                <span class="title-hover-animation">mysql索引</span>
             </div>
 
             
@@ -209,27 +209,49 @@
         
             <i class="fa-regular fa-calendar-plus"></i>&nbsp;
         
-        <span class="pc">2026-08-11 11:17:53</span>
-        <span class="mobile">2026-08-11 11:17</span>
+        <span class="pc">2026-08-11 17:17:33</span>
+        <span class="mobile">2026-08-11 17:17</span>
     </span>
     
         <span class="article-update-date article-meta-item">
         <i class="fas fa-file-pen"></i>&nbsp;
-        <span class="pc">2026-08-11 11:28:35</span>
+        <span class="pc">2026-08-11 17:17:35</span>
     </span>
     
     
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Blog/">Blog</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
     
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fas fa-file-word"></i>&nbsp;<span>744 字</span>
+            <i class="fas fa-file-word"></i>&nbsp;<span>1.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fas fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fas fa-clock"></i>&nbsp;<span>6 分钟</span>
         </span>
     
     
@@ -243,74 +265,113 @@
             <div class="article-content keep-markdown-body">
                 
 
-                <p>MQTT(Message Queuing Telemetry Transport)是一种轻量级的发布&#x2F;订阅消息传输协议，专为受限设备和低带宽、高延迟或不可靠的网络设计。</p>
-<p>主要特点：</p>
-<ul>
-<li>轻量级：协议头部仅2字节，最小化传输开销</li>
-<li>发布&#x2F;订阅模式：解耦消息发送者和接收者</li>
-<li>QoS机制：提供三种服务质量等级</li>
-<li>保留消息：新订阅者可以立即获取最新状态</li>
-<li>遗嘱消息：客户端异常断开时自动发布特定消息</li>
-<li>会话保持：支持持久会话和清除会话</li>
+                <p>在 MySQL（尤其是 InnoDB 存储引擎）中，索引是提高数据检索效率的核心机制。本文将系统对比常用的索引数据结构，并深入剖析联合索引的底层原理与实战最佳实践。</p>
+<h2 id="一、-索引数据结构对比"><a href="#一、-索引数据结构对比" class="headerlink" title="一、 索引数据结构对比"></a>一、 索引数据结构对比</h2><p>为了在海量数据中实现高效查找，数据库对底层数据结构的选择经历了多次演进。下面对比常见的几种数据结构：</p>
+<h3 id="1-Hash-索引-vs-B-树"><a href="#1-Hash-索引-vs-B-树" class="headerlink" title="1. Hash 索引 vs B+ 树"></a>1. Hash 索引 vs B+ 树</h3><ul>
+<li><strong>Hash 索引</strong>：利用哈希表存储，通过计算键值的 Hash 码映射到对应的内存&#x2F;磁盘地址。<ul>
+<li><strong>优点</strong>：等值查询（<code>=</code>、<code>IN</code>）非常快，时间复杂度接近 $O(1)$。</li>
+<li><strong>缺点</strong>：不支持范围查询（如 <code>&gt;</code>, <code>&lt;</code>, <code>BETWEEN</code>）、不支持排序（数据无序）、无法利用部分索引键进行前缀匹配。</li>
 </ul>
-<p>MQTT基于主题(Topic)的发布&#x2F;订阅模式：</p>
+</li>
+<li><strong>B+ 树索引</strong>：多路平衡查找树。<ul>
+<li><strong>优点</strong>：天然适合范围查询和排序，查询效率稳定（复杂度为 $O(\log N)$）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-B-树-vs-B-树"><a href="#2-B-树-vs-B-树" class="headerlink" title="2. B 树 vs B+ 树"></a>2. B 树 vs B+ 树</h3><p>MySQL 为什么选择 <strong>B+ 树</strong> 而不是 <strong>B 树</strong>？核心差异如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left">B 树 (B-Tree)</th>
+<th align="left">B+ 树 (B+Tree)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>数据存储位置</strong></td>
+<td align="left">所有节点（根节点、内部节点、叶子节点）都存储 key 和 data</td>
+<td align="left"><strong>仅叶子节点</strong>存储 key 和 data，非叶子节点仅存储 key（索引列值 + 页指针）</td>
+</tr>
+<tr>
+<td align="left"><strong>单页节点容量</strong></td>
+<td align="left">节点既存索引又存数据，单页（16KB）能容纳的 key 较少，<strong>树的高度相对更高</strong></td>
+<td align="left">内部节点只存索引，单页能容纳极多 key，<strong>树的高度更矮</strong>（通常 3~4 层即可存千万级数据）</td>
+</tr>
+<tr>
+<td align="left"><strong>磁盘 I&#x2F;O 次数</strong></td>
+<td align="left">较高（树越高，磁盘 I&#x2F;O 越频繁）</td>
+<td align="left"><strong>更少</strong>（树的高度更矮，极大减少磁盘 I&#x2F;O 次数）</td>
+</tr>
+<tr>
+<td align="left"><strong>范围查询能力</strong></td>
+<td align="left">需要对树进行中序遍历</td>
+<td align="left">叶子节点之间通过<strong>双向链表</strong>相连，范围查询只需在叶子节点链表上顺序扫描即可</td>
+</tr>
+<tr>
+<td align="left"><strong>查询稳定性</strong></td>
+<td align="left">查找最好情况 $O(1)$，最坏 $O(\log N)$，性能不稳定</td>
+<td align="left">任何数据的查找都需要从根节点走到叶子节点，<strong>路径长度一致，查找性能稳定</strong></td>
+</tr>
+</tbody></table>
+<h3 id="3-B-树-vs-跳表-SkipList"><a href="#3-B-树-vs-跳表-SkipList" class="headerlink" title="3. B+ 树 vs 跳表 (SkipList)"></a>3. B+ 树 vs 跳表 (SkipList)</h3><ul>
+<li><strong>跳表</strong>：Redis 中 Sorted Set 使用的数据结构，基于链表+多层索引，增删改查复杂度均为 $O(\log N)$。</li>
+<li><strong>对比选择</strong>：跳表纯在内存中操作时性能极佳且实现简单；但 MySQL 数据主要存储在<strong>磁盘</strong>中。B+ 树的“高扇出（Fan-out）”特性使得树高度极低，大幅减少了磁盘 I&#x2F;O 次数，因此更适合关系型数据库存储引擎。</li>
+</ul>
+<h2 id="二、-联合索引（复合索引）深度剖析"><a href="#二、-联合索引（复合索引）深度剖析" class="headerlink" title="二、 联合索引（复合索引）深度剖析"></a>二、 联合索引（复合索引）深度剖析</h2><p>联合索引是指基于表中的<strong>多个字段</strong>共同创建的索引，例如 <code>INDEX idx_a_b_c (a, b, c)</code>。</p>
+<h3 id="1-底层存储原理"><a href="#1-底层存储原理" class="headerlink" title="1. 底层存储原理"></a>1. 底层存储原理</h3><p>在 B+ 树中，联合索引的叶子节点按照创建索引时定义的字段顺序排布：</p>
 <ol>
-<li>发布者(Publisher)将消息发送到特定主题</li>
-<li>代理(Broker)接收消息并转发给订阅该主题的客户端</li>
-<li>订阅者(Subscriber)接收其订阅主题的所有消息</li>
+<li>先按照第一个字段 <code>a</code> 进行排序。</li>
+<li>当 <code>a</code> 的值相同时，再按照第二个字段 <code>b</code> 进行排序。</li>
+<li>当 <code>b</code> 的值也相同时，才按照第三个字段 <code>c</code> 进行排序。</li>
 </ol>
 <blockquote>
-<p>这种模式实现了发布者和订阅者的完全解耦，双方无需知道对方的存在。</p>
+<p><strong>核心结论</strong>：联合索引中，只有<strong>第一个字段 <code>a</code> 是全局有序的</strong>；而后续字段（如 <code>b</code>、<code>c</code>）仅在<strong>前序字段相等的前提下才是局部有序的</strong>。</p>
 </blockquote>
-<p>MQTT提供三种QoS(Quality of Service)级别：</p>
-<p>QoS 0 (最多一次)：</p>
+<h3 id="2-最左前缀匹配原则-Leftmost-Prefix-Principle"><a href="#2-最左前缀匹配原则-Leftmost-Prefix-Principle" class="headerlink" title="2. 最左前缀匹配原则 (Leftmost Prefix Principle)"></a>2. 最左前缀匹配原则 (Leftmost Prefix Principle)</h3><p>基于上面的存储原理，查询条件使用联合索引时必须遵循<strong>最左前缀匹配原则</strong>：</p>
+<p>假设创建联合索引 <code>(a, b, c)</code>：</p>
 <ul>
-<li>消息发送后不等待确认，可能丢失</li>
-<li>最低开销，最高吞吐量</li>
-<li>适用场景：传感器数据等允许丢失的场景</li>
+<li><strong>完全生效</strong>：<ul>
+<li><code>WHERE a = 1</code> （利用 <code>a</code> 索引）</li>
+<li><code>WHERE a = 1 AND b = 2</code> （利用 <code>a, b</code> 索引）</li>
+<li><code>WHERE a = 1 AND b = 2 AND c = 3</code> （利用 <code>a, b, c</code> 索引）</li>
 </ul>
-<p>QoS 1 (至少一次)：</p>
+</li>
+<li><strong>顺序无关性</strong>：<ul>
+<li><code>WHERE b = 2 AND a = 1</code> （MySQL 优化器会自动调整顺序为 <code>a = 1 AND b = 2</code>，仍可完全命中索引）</li>
+</ul>
+</li>
+<li><strong>部分生效 &#x2F; 失效</strong>：<ul>
+<li><code>WHERE b = 2 AND c = 3</code> （<strong>完全不生效</strong>，跳过了最左列 <code>a</code>）</li>
+<li><code>WHERE a = 1 AND c = 3</code> （<strong>仅 <code>a</code> 生效</strong>，<code>c</code> 无法通过索引快速定位）</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-范围查询与索引截断"><a href="#3-范围查询与索引截断" class="headerlink" title="3. 范围查询与索引截断"></a>3. 范围查询与索引截断</h3><p>当联合索引中出现<strong>范围查询</strong>（如 <code>&gt;</code>, <code>&lt;</code>, <code>BETWEEN</code>, <code>LIKE &#39;prefix%&#39;</code>）时，范围列可以使用索引，但<strong>范围列之后的所有列都将无法继续使用索引进行精确定位</strong>。</p>
+<p>对于索引 <code>(a, b, c)</code>，若执行 <code>WHERE a = 1 AND b &gt; 2 AND c = 3</code>：</p>
 <ul>
-<li>确保消息至少送达一次，但可能重复</li>
-<li>中等开销</li>
-<li>适用场景：计费、日志等不能丢但可以重复的场景</li>
+<li><code>a = 1</code>：精确定位，命中索引。</li>
+<li><code>b &gt; 2</code>：范围定位，命中索引。</li>
+<li><code>c = 3</code>：<strong>无法利用索引定位</strong>。因为当 <code>b &gt; 2</code> 时，<code>c</code> 的存储在整体上是无序的，无法通过 B+ 树二分查找定位，只能对满足 <code>a=1 AND b&gt;2</code> 的记录逐一检查 <code>c</code> 的值。</li>
 </ul>
-<p>QoS 2 (恰好一次)：</p>
+<h3 id="4-索引下推-Index-Condition-Pushdown-ICP"><a href="#4-索引下推-Index-Condition-Pushdown-ICP" class="headerlink" title="4. 索引下推 (Index Condition Pushdown, ICP)"></a>4. 索引下推 (Index Condition Pushdown, ICP)</h3><p>在 MySQL 5.6 引入 ICP 之前：</p>
 <ul>
-<li>确保消息只送达一次，不丢失不重复</li>
-<li>最高开销，最低吞吐量</li>
-<li>适用场景：金融交易、控制命令等关键业务</li>
+<li>如果执行 <code>WHERE a = 1 AND c = 3</code>（索引 <code>a, b, c</code>），存储引擎通过索引找到所有满足 <code>a = 1</code> 的主键，然后<strong>回表</strong>读取完整行数据，再由 Server 层过滤 <code>c = 3</code>。</li>
 </ul>
-<p>保留消息是一种特殊的消息，当发布到某个主题时，Broker会保存该消息：</p>
+<p>在 MySQL 5.6 及之后（开启 ICP）：</p>
 <ul>
-<li>任何新订阅该主题的客户端会立即收到最近的保留消息</li>
-<li>每个主题只能有一个保留消息</li>
-<li>发布空消息可以清除保留消息</li>
+<li>存储引擎在遍历联合索引时，虽然 <code>c</code> 无法用于快速 B+ 树定位，但由于索引树节点中已包含 <code>c</code> 字段的值，存储引擎会<strong>直接在索引层检查 <code>c = 3</code><strong>，不满足条件者直接过滤，</strong>大幅减少回表次数</strong>。</li>
 </ul>
-<p>应用场景：</p>
+<h3 id="5-覆盖索引-Covered-Index"><a href="#5-覆盖索引-Covered-Index" class="headerlink" title="5. 覆盖索引 (Covered Index)"></a>5. 覆盖索引 (Covered Index)</h3><p>如果一个查询的语句中，<code>SELECT</code> 所需的字段以及 <code>WHERE</code> &#x2F; <code>ORDER BY</code> 条件<strong>全部包含在联合索引的字段中</strong>，存储引擎只需扫描索引树即可拿到所需数据，无需读取聚簇索引（主键树）。</p>
 <ul>
-<li>设备状态报告</li>
-<li>配置信息发布</li>
-<li>系统公告</li>
+<li><strong>优势</strong>：避免了“回表”查询带来的随机磁盘 I&#x2F;O，极大地提升了查询性能。</li>
+<li><strong>查看方式</strong>：使用 <code>EXPLAIN</code> 分析 SQL 语句，当 <code>Extra</code> 列显示 <code>Using index</code> 时，即代表触发了覆盖索引。</li>
 </ul>
-<p>遗嘱消息(Will Message)是客户端连接到Broker时预设的一条消息，当客户端异常断开连接时，Broker会自动发布该消息：</p>
-<ul>
-<li>在CONNECT报文中设置</li>
-<li>包含主题、消息内容、QoS级别和保留标志</li>
-<li>只在非正常断开时触发</li>
-</ul>
-<p>主要用途：</p>
-<ul>
-<li>通知其他客户端设备离线</li>
-<li>发布设备最后状态</li>
-<li>触发故障恢复机制</li>
-</ul>
-<p>MQTT使用心跳机制维持连接：</p>
-<ul>
-<li>保活时间(Keep Alive)：客户端在CONNECT报文中设置表示客户端在无消息交换时最长允许的时间间隔单位为秒，0表示禁用心跳机制</li>
-<li>心跳交换：如果在保活时间内没有消息交换，客户端必须发送PINGREQ服务器必须响应PINGRESP如果服务器在1.5倍保活时间内未收到任何消息，会断开连接</li>
-<li>连接断开处理：正常断开: 客户端发送DISCONNECT.  异常断开: 触发遗嘱消息机制</li>
-</ul>
+<h2 id="三、-联合索引建表与优化最佳实践"><a href="#三、-联合索引建表与优化最佳实践" class="headerlink" title="三、 联合索引建表与优化最佳实践"></a>三、 联合索引建表与优化最佳实践</h2><ol>
+<li><strong>高频与高选择性字段置前</strong>：把查询频率最高、区分度（选择性）最好的列放在联合索引的最左侧。</li>
+<li><strong>合理利用覆盖索引</strong>：尽量只查询（<code>SELECT</code>）必要的字段，避免 <code>SELECT *</code>，从而促成覆盖索引。</li>
+<li><strong>注意范围条件的位置</strong>：尽量将需要范围查询的字段放在联合索引的末尾。</li>
+<li><strong>控制索引数量</strong>：联合索引可以替代多个单列索引（例如 <code>(a, b)</code> 已经包含了 <code>a</code> 单列索引的功能），避免重复建索引增加写操作（<code>INSERT</code>&#x2F;<code>UPDATE</code>）的开销。</li>
+</ol>
 
             </div>
 
@@ -320,16 +381,16 @@
 <div class="article-copyright-info-container">
     <ul class="copyright-info-content">
         <li class="post-title">
-            <span class="type">本文标题</span>：<span class="content">MQTT协议</span>
+            <span class="type">本文标题</span>：<span class="content">mysql索引</span>
         </li>
         <li class="post-author">
             <span class="type">本文作者</span>：<span class="content">WsWHL</span>
         </li>
         <li class="post-time">
-            <span class="type">创建时间</span>：<span class="content">2026-08-11 11:17:53</span>
+            <span class="type">创建时间</span>：<span class="content">2026-08-11 17:17:33</span>
         </li>
         <li class="post-link">
-            <span class="type">本文链接</span>：<span class="content">2026/08/11/mqtt/</span>
+            <span class="type">本文链接</span>：<span class="content">2026/08/11/mysql-index/</span>
         </li>
         <li class="post-license">
             <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
@@ -344,33 +405,26 @@
             
 
             
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/Blog/">#Blog</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
 
             
                 <div class="article-nav">
-                    
-                        <div class="article-prev">
-                            <a class="prev"
-                               rel="prev"
-                               href="/2026/08/11/gogc/"
-                            >
-                            <span class="left arrow-icon flex-center">
-                              <i class="fas fa-chevron-left"></i>
-                            </span>
-                                <span class="title flex-center">
-                                <span class="post-nav-title-item">Go垃圾回收</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                            </a>
-                        </div>
                     
                     
                         <div class="article-next">
                             <a class="next"
                                rel="next"
-                               href="/2026/07/30/transaction-isolation/"
+                               href="/2026/08/11/go-slice/"
                             >
                             <span class="title flex-center">
-                                <span class="post-nav-title-item">事务隔离级别</span>
+                                <span class="post-nav-title-item">Go切片</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                                 <span class="right arrow-icon flex-center">
@@ -448,7 +502,7 @@
             <div class="toc-content-container">
                 <div class="post-toc-wrap">
     <div class="post-toc">
-        
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.</span> <span class="nav-text">一、 索引数据结构对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Hash-%E7%B4%A2%E5%BC%95-vs-B-%E6%A0%91"><span class="nav-number">1.1.</span> <span class="nav-text">1. Hash 索引 vs B+ 树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-B-%E6%A0%91-vs-B-%E6%A0%91"><span class="nav-number">1.2.</span> <span class="nav-text">2. B 树 vs B+ 树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-B-%E6%A0%91-vs-%E8%B7%B3%E8%A1%A8-SkipList"><span class="nav-number">1.3.</span> <span class="nav-text">3. B+ 树 vs 跳表 (SkipList)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%EF%BC%88%E5%A4%8D%E5%90%88%E7%B4%A2%E5%BC%95%EF%BC%89%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">二、 联合索引（复合索引）深度剖析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BA%95%E5%B1%82%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">1. 底层存储原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E5%8C%B9%E9%85%8D%E5%8E%9F%E5%88%99-Leftmost-Prefix-Principle"><span class="nav-number">2.2.</span> <span class="nav-text">2. 最左前缀匹配原则 (Leftmost Prefix Principle)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%8C%83%E5%9B%B4%E6%9F%A5%E8%AF%A2%E4%B8%8E%E7%B4%A2%E5%BC%95%E6%88%AA%E6%96%AD"><span class="nav-number">2.3.</span> <span class="nav-text">3. 范围查询与索引截断</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8-Index-Condition-Pushdown-ICP"><span class="nav-number">2.4.</span> <span class="nav-text">4. 索引下推 (Index Condition Pushdown, ICP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95-Covered-Index"><span class="nav-number">2.5.</span> <span class="nav-text">5. 覆盖索引 (Covered Index)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95%E5%BB%BA%E8%A1%A8%E4%B8%8E%E4%BC%98%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">3.</span> <span class="nav-text">三、 联合索引建表与优化最佳实践</span></a></li></ol>
     </div>
 </div>
 
