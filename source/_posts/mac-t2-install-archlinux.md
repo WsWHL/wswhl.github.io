@@ -297,7 +297,7 @@ EDITOR=vim visudo
 ### 编辑 GRUB 配置文件
 
 ```bash
-nano /etc/default/grub
+vi /etc/default/grub
 ```
 找到 `GRUB_CMDLINE_LINUX="quiet splash"` 这一行，加入以下内核参数（T2 芯片必需）：
 ```
