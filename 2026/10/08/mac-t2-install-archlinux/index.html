@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="WsWHL, Blog, This Blog, WangHailin, Article">
+    <meta name="description" content="个人博客站点，记录开发中的知识点。分享一些干货。">
+    <meta name="author" content="WsWHL">
+    
+    <title>
+        
+            Mac T2 芯片机型安装 Arch Linux 教程 |
+        
+        This Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/font/css/brands.min.css">
+    <script id="hexo-configurations">
+    let KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"thisblog.cn","root":"/","language":"zh-CN","path":"search.json"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true},"style":{"primary_color":"#0066cc","logo":"/favicon.ico","favicon":"/favicon.ico","avatar":"/images/avatar.jpg","font_size":null,"font_family":null,"hover":{"shadow":true,"scale":true},"first_screen":{"enable":true,"header_transparent":true,"background_img":"/images/bg.svg","description":"走过很多路，看过很多风景 || 可依然过不好这一生...","font_color":null,"hitokoto":true},"scroll":{"progress_bar":true,"percent":true}},"local_search":{"enable":true,"preload":true},"code_copy":{},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"obsidian"},"side_tools":{},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":true,"use":"gitalk","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":"WsWHL","github_admins":["WsWHL"],"repository":"wswhl.github.io","client_id":"b3b5f07c8fe4c7f597ff","client_secret":"483270e7edc6f87983b5b70eba61a1e877c4f58d","proxy":"https://cors.thisblog.cn/https://github.com/login/oauth/access_token"},"twikoo":{"env_id":null,"region":null,"version":"1.6.8"},"waline":{"server_url":null,"reaction":false,"version":2}},"post":{"author_label":{"enable":true,"auto":true},"word_count":{"enable":true,"wordcount":true,"min2read":true},"img_align":"left","copyright_info":true},"version":"3.6.1"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GM8KTFQJNV"></script>
+    <script>
+       window.dataLayer = window.dataLayer || [];
+       function gtag(){dataLayer.push(arguments);}
+       gtag('js', new Date());
+
+       gtag('config', 'G-GM8KTFQJNV');
+    </script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
+    
+</div>
+
+
+<main class="page-container">
+
+    
+
+    <div class="page-main-content">
+
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="header-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/favicon.ico">
+                </a>
+            
+            <a class="logo-title" href="/">
+               This Blog
+            </a>
+        </div>
+
+        <div class="right">
+            <div class="pc">
+                <ul class="menu-list">
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/"
+                            >
+                                首页
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >
+                                归档
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                标签
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                分类
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                关于
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/">首页</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives">归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">关于</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle">
+
+            <div class="main-content">
+
+                
+                    <div class="fade-in-down-animation">
+    <div class="post-page-container">
+        <div class="article-content-container">
+
+            <div class="article-title">
+                <span class="title-hover-animation">Mac T2 芯片机型安装 Arch Linux 教程</span>
+            </div>
+
+            
+                <div class="article-header">
+                    <div class="avatar">
+                        <img src="/images/avatar.jpg">
+                    </div>
+                    <div class="info">
+                        <div class="author">
+                            <span class="name">WsWHL</span>
+                            
+                                <span class="author-label">Lv3</span>
+                            
+                        </div>
+                        <div class="meta-info">
+                            
+<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        
+            <i class="fa-regular fa-calendar-plus"></i>&nbsp;
+        
+        <span class="pc">2026-10-08 22:43:47</span>
+        <span class="mobile">2026-10-08 22:43</span>
+    </span>
+    
+        <span class="article-update-date article-meta-item">
+        <i class="fas fa-file-pen"></i>&nbsp;
+        <span class="pc">2026-10-08 22:43:51</span>
+    </span>
+    
+    
+        <span class="article-categories article-meta-item">
+            <i class="fas fa-folder"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E8%AE%B0/">每日一记</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fas fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/linux/">linux</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Blog/">Blog</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fas fa-file-word"></i>&nbsp;<span>2.1k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fas fa-clock"></i>&nbsp;<span>8 分钟</span>
+        </span>
+    
+    
+</div>
+
+                        </div>
+                    </div>
+                </div>
+            
+
+            <div class="article-content keep-markdown-body">
+                
+
+                <blockquote>
+<p>基于 <a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/distributions/arch/installation/" >t2linux wiki 官方文档<i class="fas fa-external-link-alt"></i></a> 整理，<br>适用于搭载 T2 安全芯片的 MacBook Pro &#x2F; MacBook Air &#x2F; iMac 等机型，双系统（macOS + Arch Linux）场景。</p>
+</blockquote>
+<h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h2><ul>
+<li><strong>备份数据</strong>：用 Time Machine 或其他方式备份 macOS 上的重要数据，整个过程涉及分区操作，有风险。</li>
+<li><strong>U 盘</strong>：至少 1GB 容量的 USB 驱动器（USB-A 或 USB-C，视你 Mac 接口而定）。</li>
+<li><strong>确认机型支持情况</strong>：访问 <a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/state/" >设备支持状态页<i class="fas fa-external-link-alt"></i></a> 确认你的机型&#x2F;功能支持程度。</li>
+</ul>
+<hr>
+<h2 id="2-分区（macOS-端）"><a href="#2-分区（macOS-端）" class="headerlink" title="2. 分区（macOS 端）"></a>2. 分区（macOS 端）</h2><ol>
+<li>打开 <strong>磁盘工具</strong>（Disk Utility）。</li>
+<li>选中主硬盘 → 点击 **”分区”**（Partition）。</li>
+<li>点击饼图下方的 <strong>“+”</strong> → 弹窗中务必选择 <strong>“Add Partition”（添加分区）</strong>，<strong>不要选 “Add Volume”（添加卷）</strong>，否则会建成 APFS 容器内的卷而不是独立分区。</li>
+<li>命名分区（如 <code>Linux</code>），格式随意（exFAT 或 Mac OS 扩展均可，后续会被 Linux 重新格式化）。</li>
+<li>分配好大小后确认。</li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>关于现有 EFI 分区</strong>：Mac 磁盘上已经存在一个约 300MB 的 EFI 系统分区（通常是 <code>/dev/nvme0n1p1</code>），<strong>全程不需要新建或格式化它</strong>，Arch 安装时直接复用即可。只有计划三系统（还要装 Windows）时才需要额外规划 EFI 分区，参考 <a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/guides/windows/" >Windows 三系统指南<i class="fas fa-external-link-alt"></i></a>。</p>
+</blockquote>
+<h3 id="关闭-Secure-Boot，允许外部启动"><a href="#关闭-Secure-Boot，允许外部启动" class="headerlink" title="关闭 Secure Boot，允许外部启动"></a>关闭 Secure Boot，允许外部启动</h3><ol>
+<li>重启进入恢复模式：开机时按住 <strong>Cmd + R</strong>。</li>
+<li>进入 <strong>工具程序 → 启动安全性实用工具</strong>。</li>
+<li>选择 **”不安全”&#x2F;“降低安全性”**，并勾选允许从外部介质启动。</li>
+</ol>
+<h3 id="（可选）提前复制-WiFi-x2F-蓝牙固件到-EFI-分区"><a href="#（可选）提前复制-WiFi-x2F-蓝牙固件到-EFI-分区" class="headerlink" title="（可选）提前复制 WiFi&#x2F;蓝牙固件到 EFI 分区"></a>（可选）提前复制 WiFi&#x2F;蓝牙固件到 EFI 分区</h3><p>T2 Mac 的 WiFi 是博通芯片，需要闭源固件，live 环境默认没有，提前复制可以避免安装阶段没有网络：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -sL https://wiki.t2linux.org/tools/firmware.sh | bash -s copy_to_efi</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-制作安装-U-盘"><a href="#3-制作安装-U-盘" class="headerlink" title="3. 制作安装 U 盘"></a>3. 制作安装 U 盘</h2><p>下载 T2 专用的 Arch Linux ISO（<strong>不能用官方原版 Arch ISO，没有 T2 内核补丁装不了</strong>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/t2linux/archiso-t2/releases/latest</span><br></pre></td></tr></table></figure>
+
+<p>用 <code>dd</code> 或 balenaEtcher 写入 U 盘。</p>
+<hr>
+<h2 id="4-进入-Live-环境"><a href="#4-进入-Live-环境" class="headerlink" title="4. 进入 Live 环境"></a>4. 进入 Live 环境</h2><p>插入 U 盘，重启，按住 <strong>Option (⌥)</strong> 键，选择 U 盘对应的 <strong>“EFI Boot”</strong> 启动项进入 live 环境。</p>
+<h3 id="初始化密钥环（强烈建议第一步就做，避免后续-pacstrap-报错）"><a href="#初始化密钥环（强烈建议第一步就做，避免后续-pacstrap-报错）" class="headerlink" title="初始化密钥环（强烈建议第一步就做，避免后续 pacstrap 报错）"></a>初始化密钥环（强烈建议第一步就做，避免后续 pacstrap 报错）</h3><p>live 环境启动后，<code>pacman-init.service</code> 会在后台自动初始化密钥环，但偶尔会有竞态问题导致后续安装报 <code>keyring is not writable</code> 或签名 “unknown trust” 错误。建议先手动确认一遍：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl status pacman-init.service   <span class="comment"># 确认是 inactive (dead)，不是 activating</span></span><br><span class="line">pacman-key --init</span><br><span class="line">pacman-key --populate archlinux</span><br></pre></td></tr></table></figure>
+
+<h3 id="确认系统时间正确"><a href="#确认系统时间正确" class="headerlink" title="确认系统时间正确"></a>确认系统时间正确</h3><p>GPG 签名校验对系统时间敏感，时间错乱会导致各种”signature unknown trust”&#x2F;“corrupted package”报错：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">timedatectl set-ntp <span class="literal">true</span></span><br><span class="line">timedatectl status    <span class="comment"># 确认 System clock synchronized: yes</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-联网（重要，常见卡点）"><a href="#5-联网（重要，常见卡点）" class="headerlink" title="5. 联网（重要，常见卡点）"></a>5. 联网（重要，常见卡点）</h2><p>Live 环境默认<strong>没有 WiFi</strong>（博通芯片需要闭源固件）。按方便程度选择：</p>
+<h3 id="方法一：有线网络（最简单）"><a href="#方法一：有线网络（最简单）" class="headerlink" title="方法一：有线网络（最简单）"></a>方法一：有线网络（最简单）</h3><p>USB 转以太网适配器，插上基本免驱动自动获取 IP。</p>
+<h3 id="方法二：手机-USB-共享网络"><a href="#方法二：手机-USB-共享网络" class="headerlink" title="方法二：手机 USB 共享网络"></a>方法二：手机 USB 共享网络</h3><p>数据线连接手机，开启 USB 网络共享&#x2F;个人热点。</p>
+<h3 id="方法三：使用提前复制好的固件（如果第-2-步做过）"><a href="#方法三：使用提前复制好的固件（如果第-2-步做过）" class="headerlink" title="方法三：使用提前复制好的固件（如果第 2 步做过）"></a>方法三：使用提前复制好的固件（如果第 2 步做过）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nvme0n1p1 /mnt</span><br><span class="line">bash /mnt/firmware.sh get_from_efi</span><br><span class="line">umount /mnt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启iwd服务</span></span><br><span class="line">systemctl restart iwd.service</span><br><span class="line"></span><br><span class="line">iwctl</span><br><span class="line"><span class="comment"># 在 iwctl 交互界面里：</span></span><br><span class="line">station wlan0 connect 你的WiFi名</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-手动分区确认与格式化"><a href="#6-手动分区确认与格式化" class="headerlink" title="6. 手动分区确认与格式化"></a>6. 手动分区确认与格式化</h2><h3 id="查看分区情况"><a href="#查看分区情况" class="headerlink" title="查看分区情况"></a>查看分区情况</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br><span class="line"><span class="comment"># 或者针对整个磁盘（不要带分区号）</span></span><br><span class="line">gdisk -l /dev/nvme0n1</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>易错点</strong>：一定要对整个磁盘 <code>/dev/nvme0n1</code> 执行 <code>gdisk -l</code>，而不是对某个分区（如 <code>/dev/nvme0n1p1</code>）执行。对分区本身执行会被工具误读成 “Disklabel type: dos” 这种错误提示，这只是文件系统引导扇区的误判，不代表磁盘真的损坏。</p>
+</blockquote>
+<p>正常情况下磁盘结构类似：</p>
+<table>
+<thead>
+<tr>
+<th>分区</th>
+<th>内容</th>
+<th>类型码</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nvme0n1p1</code></td>
+<td>EFI 系统分区（约 300MB）</td>
+<td><code>EF00</code></td>
+<td><strong>不格式化</strong>，直接复用</td>
+</tr>
+<tr>
+<td><code>nvme0n1p2</code></td>
+<td>macOS（APFS）</td>
+<td><code>AF00</code></td>
+<td>不要动</td>
+</tr>
+<tr>
+<td><code>nvme0n1p3</code></td>
+<td>之前划出的 Linux 分区</td>
+<td><code>8300</code>（装完后会是）</td>
+<td>格式化</td>
+</tr>
+</tbody></table>
+<h3 id="格式化-Linux-分区（跳过-EFI-分区）"><a href="#格式化-Linux-分区（跳过-EFI-分区）" class="headerlink" title="格式化 Linux 分区（跳过 EFI 分区）"></a>格式化 Linux 分区（跳过 EFI 分区）</h3><p><strong>ext4 方案：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfs.ext4 /dev/nvme0n1p3</span><br></pre></td></tr></table></figure>
+
+<p><strong>btrfs 方案（如果偏好 btrfs 的快照&#x2F;压缩特性）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkfs.btrfs -L archlinux /dev/nvme0n1p3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建子卷（可选但推荐）</span></span><br><span class="line">mount /dev/nvme0n1p3 /mnt</span><br><span class="line">btrfs subvolume create /mnt/@</span><br><span class="line">btrfs subvolume create /mnt/@home</span><br><span class="line">btrfs subvolume create /mnt/@snapshots</span><br><span class="line">btrfs subvolume create /mnt/@var_log</span><br><span class="line">umount /mnt</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ <strong>全程不要对 <code>nvme0n1p1</code>（EFI 分区）执行任何 <code>mkfs</code> 命令。</strong></p>
+<hr>
+<h2 id="7-挂载分区"><a href="#7-挂载分区" class="headerlink" title="7. 挂载分区"></a>7. 挂载分区</h2><p><strong>ext4 方案：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nvme0n1p3 /mnt</span><br><span class="line"><span class="built_in">mkdir</span> -p /mnt/boot</span><br><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure>
+
+<p><strong>btrfs 方案（按子卷挂载）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mount -o noatime,compress=zstd,subvol=@ /dev/nvme0n1p3 /mnt</span><br><span class="line"><span class="built_in">mkdir</span> -p /mnt/&#123;home,.snapshots,var/log,boot&#125;</span><br><span class="line">mount -o noatime,compress=zstd,subvol=@home /dev/nvme0n1p3 /mnt/home</span><br><span class="line">mount -o noatime,compress=zstd,subvol=@snapshots /dev/nvme0n1p3 /mnt/.snapshots</span><br><span class="line">mount -o noatime,compress=zstd,subvol=@var_log /dev/nvme0n1p3 /mnt/var/log</span><br><span class="line">mount /dev/nvme0n1p1 /mnt/boot</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里的关键是把**现有 EFI 分区挂载到 <code>/mnt/boot</code>**，而不是重新创建它——引导程序只是往里面新增一个 Linux 的引导项，macOS 原有的引导文件不会被删除或覆盖。</p>
+</blockquote>
+<hr>
+<h2 id="8-安装基础系统"><a href="#8-安装基础系统" class="headerlink" title="8. 安装基础系统"></a>8. 安装基础系统</h2><h3 id="方式-A：pacstrap（更接近原生-Arch-体验，推荐）"><a href="#方式-A：pacstrap（更接近原生-Arch-体验，推荐）" class="headerlink" title="方式 A：pacstrap（更接近原生 Arch 体验，推荐）"></a>方式 A：pacstrap（更接近原生 Arch 体验，推荐）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pacstrap /mnt base linux-t2 linux-t2-headers arch-mact2-mirrorlist \</span><br><span class="line">  arch-mact2-rankmirrors apple-t2-audio-config apple-bcm-firmware-fetcher \</span><br><span class="line">  linux-firmware iwd grub efibootmgr t2fanrd btrfs-progs</span><br></pre></td></tr></table></figure>
+<p>（如果用 systemd-boot 而非 GRUB，去掉 <code>grub efibootmgr</code>；如果用 ext4 而非 btrfs，去掉 <code>btrfs-progs</code>）</p>
+<p>安装前需要把 T2 的仓库加进 <code>/mnt/etc/pacman.conf</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /mnt/etc/pacman.conf</span><br></pre></td></tr></table></figure>
+<p>加入：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[arch-mact2]</span></span><br><span class="line"><span class="attr">Include</span> = /etc/pacman.d/arch-mact2-mirrorlist</span><br><span class="line"><span class="attr">SigLevel</span> = Never</span><br></pre></td></tr></table></figure>
+
+<h3 id="方式-B：t2strap（更省事，自动配置好仓库）"><a href="#方式-B：t2strap（更省事，自动配置好仓库）" class="headerlink" title="方式 B：t2strap（更省事，自动配置好仓库）"></a>方式 B：t2strap（更省事，自动配置好仓库）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t2strap /mnt base linux-firmware iwd grub efibootmgr</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="9-系统基础配置（时区、语言、主机名）"><a href="#9-系统基础配置（时区、语言、主机名）" class="headerlink" title="9. 系统基础配置（时区、语言、主机名）"></a>9. 系统基础配置（时区、语言、主机名）</h2><h3 id="生成-fstab"><a href="#生成-fstab" class="headerlink" title="生成 fstab"></a>生成 fstab</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span><br><span class="line"><span class="built_in">cat</span> /mnt/etc/fstab   <span class="comment"># 检查无误，确认各分区 UUID 正确对应</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="进入-chroot"><a href="#进入-chroot" class="headerlink" title="进入 chroot"></a>进入 chroot</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置语言-locale"><a href="#设置语言-locale" class="headerlink" title="设置语言 locale"></a>设置语言 locale</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/locale.gen</span><br></pre></td></tr></table></figure>
+<p>取消注释（去掉行首 <code>#</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zh_CN.UTF-8 UTF-8</span><br><span class="line">en_US.UTF-8 UTF-8</span><br></pre></td></tr></table></figure>
+<p>生成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">locale-gen</span><br></pre></td></tr></table></figure>
+<p>设置系统默认语言：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;LANG=en_US.UTF-8&quot;</span> &gt; /etc/locale.conf</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名"></a>设置主机名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;archlinux-t2&quot;</span> &gt; /etc/hostname</span><br><span class="line">vi /etc/hosts</span><br></pre></td></tr></table></figure>
+<p>写入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1   localhost</span><br><span class="line">::1         localhost</span><br><span class="line">127.0.1.1   archlinux-t2.localdomain archlinux-t2</span><br></pre></td></tr></table></figure>
+
+<h3 id="设置-root-密码"><a href="#设置-root-密码" class="headerlink" title="设置 root 密码"></a>设置 root 密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="10-新增用户与权限"><a href="#10-新增用户与权限" class="headerlink" title="10. 新增用户与权限"></a>10. 新增用户与权限</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd -m -G wheel -s /bin/bash user1</span><br><span class="line">passwd user1</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-m</code>：自动创建家目录</li>
+<li><code>-G wheel</code>：加入 wheel 组（配合 sudo 权限）</li>
+<li><code>-s /bin/bash</code>：默认 shell</li>
+</ul>
+<h3 id="配置-sudo-权限"><a href="#配置-sudo-权限" class="headerlink" title="配置 sudo 权限"></a>配置 sudo 权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pacman -S sudo</span><br><span class="line">EDITOR=vim visudo</span><br></pre></td></tr></table></figure>
+
+<p>找到并取消注释：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%wheel ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="11-安装引导程序（GRUB）"><a href="#11-安装引导程序（GRUB）" class="headerlink" title="11. 安装引导程序（GRUB）"></a>11. 安装引导程序（GRUB）</h2><h3 id="编辑-GRUB-配置文件"><a href="#编辑-GRUB-配置文件" class="headerlink" title="编辑 GRUB 配置文件"></a>编辑 GRUB 配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/default/grub</span><br></pre></td></tr></table></figure>
+<p>找到 <code>GRUB_CMDLINE_LINUX=&quot;quiet splash&quot;</code> 这一行，加入以下内核参数（T2 芯片必需）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRUB_CMDLINE_LINUX=&quot;quiet splash intel_iommu=on iommu=pt pm_async=off&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-GRUB（⚠️-Mac-上必须加-removable）"><a href="#安装-GRUB（⚠️-Mac-上必须加-removable）" class="headerlink" title="安装 GRUB（⚠️ Mac 上必须加 --removable）"></a>安装 GRUB（⚠️ Mac 上必须加 <code>--removable</code>）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>**为什么必须加 <code>--removable</code>**：Mac 的 Startup Manager（按住 Option 的启动选择界面）不读取 NVRAM 里 <code>efibootmgr</code> 写入的条目，只扫描每个分区固定的 <code>/EFI/BOOT/BOOTX64.EFI</code> 路径。不加这个参数，装完按 Option 只会看到 macOS，看不到 Linux 引导项。</p>
+<p>如果已经装过忘记加这个参数，可以不重装，直接补一份文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /boot/EFI/BOOT</span><br><span class="line"><span class="built_in">cp</span> /boot/EFI/GRUB/grubx64.efi /boot/EFI/BOOT/BOOTX64.EFI</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="生成-GRUB-配置文件"><a href="#生成-GRUB-配置文件" class="headerlink" title="生成 GRUB 配置文件"></a>生成 GRUB 配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
+<p>确认输出中包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Found linux image: /boot/vmlinuz-linux-t2</span><br><span class="line">Found initrd image: /boot/initramfs-linux-t2.img</span><br></pre></td></tr></table></figure>
+<p>如果没有这两行，说明 <code>linux-t2</code> 内核包没装成功（常见于之前密钥环报错导致包被跳过），需要补装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pacman -S linux-t2 linux-t2-headers</span><br></pre></td></tr></table></figure>
+
+<h3 id="启用风扇控制服务"><a href="#启用风扇控制服务" class="headerlink" title="启用风扇控制服务"></a>启用风扇控制服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> t2fanrd</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="12-完成安装并重启"><a href="#12-完成安装并重启" class="headerlink" title="12. 完成安装并重启"></a>12. 完成安装并重启</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br><span class="line">umount -R /mnt</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>拔掉 U 盘，开机按住 **Option (⌥)**，应该能同时看到 macOS 和 Arch Linux 的引导选项。</p>
+<hr>
+<h2 id="13-安装-Deepin-桌面环境"><a href="#13-安装-Deepin-桌面环境" class="headerlink" title="13. 安装 Deepin 桌面环境"></a>13. 安装 Deepin 桌面环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S deepin deepin-extra</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>deepin</code>：核心桌面组件</li>
+<li><code>deepin-extra</code>：原生应用（截图、相册、音乐播放器等）</li>
+</ul>
+<h3 id="安装登录管理器"><a href="#安装登录管理器" class="headerlink" title="安装登录管理器"></a>安装登录管理器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S lightdm lightdm-deepin-greeter</span><br><span class="line">sudo systemctl <span class="built_in">enable</span> lightdm</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="14-中文环境与输入法"><a href="#14-中文环境与输入法" class="headerlink" title="14. 中文环境与输入法"></a>14. 中文环境与输入法</h2><h3 id="安装中文字体"><a href="#安装中文字体" class="headerlink" title="安装中文字体"></a>安装中文字体</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji</span><br><span class="line">fc-cache -fv</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装中文输入法（fcitx5）"><a href="#安装中文输入法（fcitx5）" class="headerlink" title="安装中文输入法（fcitx5）"></a>安装中文输入法（fcitx5）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S fcitx5-im fcitx5-chinese-addons</span><br></pre></td></tr></table></figure>
+<p>编辑 <code>~/.pam_environment</code> 或 <code>/etc/environment</code>，加入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GTK_IM_MODULE=fcitx</span><br><span class="line">QT_IM_MODULE=fcitx</span><br><span class="line">XMODIFIERS=@im=fcitx</span><br></pre></td></tr></table></figure>
+<p>注销重新登录生效，系统托盘应出现 fcitx5 图标，右键配置添加拼音&#x2F;五笔等输入法。</p>
+<hr>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/distributions/arch/installation/" >t2linux wiki 安装指南原文<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/guides/preinstall/" >Pre-Install 准备指南<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/guides/postinstall/" >Basic Setup 后续配置<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/guides/wifi-bluetooth/" >WiFi 与蓝牙指南<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/guides/fan/" >风扇控制指南<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/guides/uninstall/" >卸载指南<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://wiki.t2linux.org/state/" >设备支持状态<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+
+            </div>
+
+            
+                <div class="post-copyright-info">
+                    
+<div class="article-copyright-info-container">
+    <ul class="copyright-info-content">
+        <li class="post-title">
+            <span class="type">本文标题</span>：<span class="content">Mac T2 芯片机型安装 Arch Linux 教程</span>
+        </li>
+        <li class="post-author">
+            <span class="type">本文作者</span>：<span class="content">WsWHL</span>
+        </li>
+        <li class="post-time">
+            <span class="type">创建时间</span>：<span class="content">2026-10-08 22:43:47</span>
+        </li>
+        <li class="post-link">
+            <span class="type">本文链接</span>：<span class="content">2026/10/08/mac-t2-install-archlinux/</span>
+        </li>
+        <li class="post-license">
+            <span class="type">版权声明</span>：<span class="content">本博客所有文章除特别声明外，均采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">BY-NC-SA</a> 许可协议。转载请注明出处！</span>
+        </li>
+    </ul>
+    <div class="copy-copyright-info flex-center tooltip" data-content="复制版权信息" data-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                </div>
+            
+
+            
+                <ul class="post-tags-box">
+                    
+                        <li class="tag-item">
+                            <a href="/tags/linux/">#linux</a>&nbsp;
+                        </li>
+                    
+                        <li class="tag-item">
+                            <a href="/tags/Blog/">#Blog</a>&nbsp;
+                        </li>
+                    
+                </ul>
+            
+
+            
+                <div class="article-nav">
+                    
+                    
+                        <div class="article-next">
+                            <a class="next"
+                               rel="next"
+                               href="/2026/08/11/mysql-index/"
+                            >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">mysql索引</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                                <span class="right arrow-icon flex-center">
+                              <i class="fas fa-chevron-right"></i>
+                            </span>
+                            </a>
+                        </div>
+                    
+                </div>
+            
+
+            
+                <div class="comment-container">
+                    
+<div class="comments-container">
+    <div id="comments-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fas fa-comments"></i>&nbsp;评论
+    </div>
+    
+        
+            
+
+    <div class="gitalk-comment-container">
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+        <script data-pjax src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+        <script data-pjax>
+          function loadGitalk() {
+            let __gitalk__pathname = decodeURI(location.pathname);
+            const __gitalk__pathnameLength = __gitalk__pathname.length;
+            const __gitalk__pathnameMaxLength = 50;
+            if (__gitalk__pathnameLength > __gitalk__pathnameMaxLength) {
+              __gitalk__pathname = __gitalk__pathname.substring(0, __gitalk__pathnameMaxLength - 3) + '...';
+            }
+
+            try {
+              Gitalk && new Gitalk({
+                clientID: 'b3b5f07c8fe4c7f597ff',
+                clientSecret: '483270e7edc6f87983b5b70eba61a1e877c4f58d',
+                repo: 'wswhl.github.io',
+                owner: 'WsWHL',
+                admin: 'WsWHL',
+                id: __gitalk__pathname,
+                proxy: 'https://cors.thisblog.cn/https://github.com/login/oauth/access_token',
+                language: 'zh-CN'
+              }).render('gitalk-container');
+            } catch (e) {
+              window.Gitalk = null;
+            }
+          }
+
+          if ('true' === 'true') {
+            const loadGitalkTimeout = setTimeout(() => {
+              loadGitalk();
+              clearTimeout(loadGitalkTimeout);
+            }, 1000);
+          } else {
+            window.addEventListener('DOMContentLoaded', loadGitalk);
+          }
+        </script>
+    </div>
+
+
+
+        
+    
+</div>
+
+                </div>
+            
+        </div>
+
+        
+            <div class="toc-content-container">
+                <div class="post-toc-wrap">
+    <div class="post-toc">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">1. 准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%86%E5%8C%BA%EF%BC%88macOS-%E7%AB%AF%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">2. 分区（macOS 端）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%97%AD-Secure-Boot%EF%BC%8C%E5%85%81%E8%AE%B8%E5%A4%96%E9%83%A8%E5%90%AF%E5%8A%A8"><span class="nav-number">2.1.</span> <span class="nav-text">关闭 Secure Boot，允许外部启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89%E6%8F%90%E5%89%8D%E5%A4%8D%E5%88%B6-WiFi-x2F-%E8%93%9D%E7%89%99%E5%9B%BA%E4%BB%B6%E5%88%B0-EFI-%E5%88%86%E5%8C%BA"><span class="nav-number">2.2.</span> <span class="nav-text">（可选）提前复制 WiFi&#x2F;蓝牙固件到 EFI 分区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%88%B6%E4%BD%9C%E5%AE%89%E8%A3%85-U-%E7%9B%98"><span class="nav-number">3.</span> <span class="nav-text">3. 制作安装 U 盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%BF%9B%E5%85%A5-Live-%E7%8E%AF%E5%A2%83"><span class="nav-number">4.</span> <span class="nav-text">4. 进入 Live 环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AF%86%E9%92%A5%E7%8E%AF%EF%BC%88%E5%BC%BA%E7%83%88%E5%BB%BA%E8%AE%AE%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%B0%B1%E5%81%9A%EF%BC%8C%E9%81%BF%E5%85%8D%E5%90%8E%E7%BB%AD-pacstrap-%E6%8A%A5%E9%94%99%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">初始化密钥环（强烈建议第一步就做，避免后续 pacstrap 报错）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E8%AE%A4%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4%E6%AD%A3%E7%A1%AE"><span class="nav-number">4.2.</span> <span class="nav-text">确认系统时间正确</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%81%94%E7%BD%91%EF%BC%88%E9%87%8D%E8%A6%81%EF%BC%8C%E5%B8%B8%E8%A7%81%E5%8D%A1%E7%82%B9%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">5. 联网（重要，常见卡点）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C%EF%BC%88%E6%9C%80%E7%AE%80%E5%8D%95%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">方法一：有线网络（最简单）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E6%89%8B%E6%9C%BA-USB-%E5%85%B1%E4%BA%AB%E7%BD%91%E7%BB%9C"><span class="nav-number">5.2.</span> <span class="nav-text">方法二：手机 USB 共享网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%8F%90%E5%89%8D%E5%A4%8D%E5%88%B6%E5%A5%BD%E7%9A%84%E5%9B%BA%E4%BB%B6%EF%BC%88%E5%A6%82%E6%9E%9C%E7%AC%AC-2-%E6%AD%A5%E5%81%9A%E8%BF%87%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">方法三：使用提前复制好的固件（如果第 2 步做过）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%89%8B%E5%8A%A8%E5%88%86%E5%8C%BA%E7%A1%AE%E8%AE%A4%E4%B8%8E%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="nav-number">6.</span> <span class="nav-text">6. 手动分区确认与格式化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%86%E5%8C%BA%E6%83%85%E5%86%B5"><span class="nav-number">6.1.</span> <span class="nav-text">查看分区情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96-Linux-%E5%88%86%E5%8C%BA%EF%BC%88%E8%B7%B3%E8%BF%87-EFI-%E5%88%86%E5%8C%BA%EF%BC%89"><span class="nav-number">6.2.</span> <span class="nav-text">格式化 Linux 分区（跳过 EFI 分区）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%8C%82%E8%BD%BD%E5%88%86%E5%8C%BA"><span class="nav-number">7.</span> <span class="nav-text">7. 挂载分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E5%AE%89%E8%A3%85%E5%9F%BA%E7%A1%80%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.</span> <span class="nav-text">8. 安装基础系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F-A%EF%BC%9Apacstrap%EF%BC%88%E6%9B%B4%E6%8E%A5%E8%BF%91%E5%8E%9F%E7%94%9F-Arch-%E4%BD%93%E9%AA%8C%EF%BC%8C%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">8.1.</span> <span class="nav-text">方式 A：pacstrap（更接近原生 Arch 体验，推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F-B%EF%BC%9At2strap%EF%BC%88%E6%9B%B4%E7%9C%81%E4%BA%8B%EF%BC%8C%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%A5%BD%E4%BB%93%E5%BA%93%EF%BC%89"><span class="nav-number">8.2.</span> <span class="nav-text">方式 B：t2strap（更省事，自动配置好仓库）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80%E9%85%8D%E7%BD%AE%EF%BC%88%E6%97%B6%E5%8C%BA%E3%80%81%E8%AF%AD%E8%A8%80%E3%80%81%E4%B8%BB%E6%9C%BA%E5%90%8D%EF%BC%89"><span class="nav-number">9.</span> <span class="nav-text">9. 系统基础配置（时区、语言、主机名）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90-fstab"><span class="nav-number">9.1.</span> <span class="nav-text">生成 fstab</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5-chroot"><span class="nav-number">9.2.</span> <span class="nav-text">进入 chroot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E6%97%B6%E5%8C%BA"><span class="nav-number">9.3.</span> <span class="nav-text">设置时区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E8%AF%AD%E8%A8%80-locale"><span class="nav-number">9.4.</span> <span class="nav-text">设置语言 locale</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%BB%E6%9C%BA%E5%90%8D"><span class="nav-number">9.5.</span> <span class="nav-text">设置主机名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-root-%E5%AF%86%E7%A0%81"><span class="nav-number">9.6.</span> <span class="nav-text">设置 root 密码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90"><span class="nav-number">10.</span> <span class="nav-text">10. 新增用户与权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-sudo-%E6%9D%83%E9%99%90"><span class="nav-number">10.1.</span> <span class="nav-text">配置 sudo 权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E5%AE%89%E8%A3%85%E5%BC%95%E5%AF%BC%E7%A8%8B%E5%BA%8F%EF%BC%88GRUB%EF%BC%89"><span class="nav-number">11.</span> <span class="nav-text">11. 安装引导程序（GRUB）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91-GRUB-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">11.1.</span> <span class="nav-text">编辑 GRUB 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-GRUB%EF%BC%88%E2%9A%A0%EF%B8%8F-Mac-%E4%B8%8A%E5%BF%85%E9%A1%BB%E5%8A%A0-removable%EF%BC%89"><span class="nav-number">11.2.</span> <span class="nav-text">安装 GRUB（⚠️ Mac 上必须加 --removable）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90-GRUB-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">11.3.</span> <span class="nav-text">生成 GRUB 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E9%A3%8E%E6%89%87%E6%8E%A7%E5%88%B6%E6%9C%8D%E5%8A%A1"><span class="nav-number">11.4.</span> <span class="nav-text">启用风扇控制服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-%E5%AE%8C%E6%88%90%E5%AE%89%E8%A3%85%E5%B9%B6%E9%87%8D%E5%90%AF"><span class="nav-number">12.</span> <span class="nav-text">12. 完成安装并重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-%E5%AE%89%E8%A3%85-Deepin-%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83"><span class="nav-number">13.</span> <span class="nav-text">13. 安装 Deepin 桌面环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%99%BB%E5%BD%95%E7%AE%A1%E7%90%86%E5%99%A8"><span class="nav-number">13.1.</span> <span class="nav-text">安装登录管理器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-%E4%B8%AD%E6%96%87%E7%8E%AF%E5%A2%83%E4%B8%8E%E8%BE%93%E5%85%A5%E6%B3%95"><span class="nav-number">14.</span> <span class="nav-text">14. 中文环境与输入法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93"><span class="nav-number">14.1.</span> <span class="nav-text">安装中文字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%B8%AD%E6%96%87%E8%BE%93%E5%85%A5%E6%B3%95%EF%BC%88fcitx5%EF%BC%89"><span class="nav-number">14.2.</span> <span class="nav-text">安装中文输入法（fcitx5）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">15.</span> <span class="nav-text">参考链接</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom">
+            
+<footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info info-item">
+            &copy;
+            
+            2026
+            
+                &nbsp;<i class="fas fa-heart icon-animate"></i>
+                &nbsp;<a href="/">WsWHL</a>
+            
+        </div>
+        
+        <div class="theme-info info-item">
+            由 <a target="_blank" href="https://hexo.io">Hexo</a> 驱动&nbsp;|&nbsp;主题&nbsp;<a class="theme-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep v3.6.1</a>
+        </div>
+        
+        
+            <div class="deploy-info info-item">
+                
+                    <a target="_blank" rel="nofollow" href="https://github.com/WsWHL/wswhl.github.io">
+                
+                    本站由 <span class="tooltip" data-content="GitHub Pages"><img src="/images/deploy-provider/github.png"></span> 提供部署服务
+                
+                    </a>
+                
+            </div>
+        
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-bottom-side-tools">
+        <div class="side-tools-container">
+    <ul class="side-tools-list">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-dark-light-toggle flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list">
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="tools-item tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/dark-light-toggle.js"></script>
+
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/local-search.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/code-block.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/lazyload.js"></script>
+
+
+<div class="post-scripts pjax">
+    
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/post-helper.js"></script>
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/anime.min.js"></script>
+        
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/toc.js"></script>
+        
+    
+</div>
+
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.6.1/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            // scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart();
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd();
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'));
+            KEEP.refresh();
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
