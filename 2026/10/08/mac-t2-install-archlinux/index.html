@@ -411,7 +411,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%wheel ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="11-安装引导程序（GRUB）"><a href="#11-安装引导程序（GRUB）" class="headerlink" title="11. 安装引导程序（GRUB）"></a>11. 安装引导程序（GRUB）</h2><h3 id="编辑-GRUB-配置文件"><a href="#编辑-GRUB-配置文件" class="headerlink" title="编辑 GRUB 配置文件"></a>编辑 GRUB 配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano /etc/default/grub</span><br></pre></td></tr></table></figure>
+<h2 id="11-安装引导程序（GRUB）"><a href="#11-安装引导程序（GRUB）" class="headerlink" title="11. 安装引导程序（GRUB）"></a>11. 安装引导程序（GRUB）</h2><h3 id="编辑-GRUB-配置文件"><a href="#编辑-GRUB-配置文件" class="headerlink" title="编辑 GRUB 配置文件"></a>编辑 GRUB 配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/default/grub</span><br></pre></td></tr></table></figure>
 <p>找到 <code>GRUB_CMDLINE_LINUX=&quot;quiet splash&quot;</code> 这一行，加入以下内核参数（T2 芯片必需）：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GRUB_CMDLINE_LINUX=&quot;quiet splash intel_iommu=on iommu=pt pm_async=off&quot;</span><br></pre></td></tr></table></figure>
 
